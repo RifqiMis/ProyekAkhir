@@ -85,9 +85,10 @@ class PegawaiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $data = Pegawai::find($id);
+        return view('pegawai.show',compact('data'))->renderSections()['content'];
     }
 
     /**
@@ -142,7 +143,7 @@ class PegawaiController extends Controller
             );
             $data->foto = $new_foto_path;
         }
-
+        
         $data->save();
   
         return redirect()->route('pegawai.index')->with('success','Berhasil mengubah pegawai : ' . $request->nama_pegawai );

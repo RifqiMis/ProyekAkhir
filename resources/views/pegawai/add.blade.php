@@ -99,7 +99,7 @@
                     <div class="col-4">
                         <div class="form-group row">
                             <label class="col-2 col-form-label">Foto</label>
-                            <div class="col-10">
+                            <div class="col-4">
                                 <input id="upload" class="col-form-label" type="file" name="foto" onchange="readURL(this);" class="form-control border-0">
                             </div>
                         </div>
