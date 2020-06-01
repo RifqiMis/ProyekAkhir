@@ -30,4 +30,14 @@ class PekerjaanMeta extends Model
      * @var string
      */
     protected $keyType = 'string';
+
+    public function pekerjaan()
+    {
+        return $this->belongsTo('App\Pekerjaan','id_pekerjaan');
+    }
+
+    public function riwayatPekerjaan()
+    {
+        return $this->belongsTo('App\RiwayatPekerjaan','id_meta');
+    }
 }
