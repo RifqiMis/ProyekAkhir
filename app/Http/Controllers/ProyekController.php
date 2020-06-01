@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Proyek;
+use App\Pekerjaan;
+use App\RiwayatPekerjaan;
+use App\PekerjaanMeta;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
@@ -66,7 +69,10 @@ class ProyekController extends Controller
      */
     public function show($id)
     {
-        //
+        $proyek     = Proyek::find($id);
+        $pekerjaan  = Pekerjaan::all();
+        $details    = RiwayatPekerjaan::where('id_proyek',$id)->paginate(10);
+        return view('proyek.detail', compact(['proyek','pekerjaan','details']));
     }
 
     /**
@@ -130,6 +136,9 @@ class ProyekController extends Controller
     public function destroy($id)
     {
         $proyek = Proyek::findOrFail($id);
+        if($proyek->foto && file_exists(storage_path('app/public/' .$proyek->foto))){
+            \Storage::delete('public/'. $proyek->foto);
+        }
         $proyek->delete();
 
         return redirect()->route('proyek.index')->with('success','Berhasil Menghapus proyek');

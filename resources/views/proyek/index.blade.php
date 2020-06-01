@@ -51,8 +51,8 @@
                         </td>
                         <td>
                             <form action="{{url("proyek/{$proyek->id_proyek}")}}" method="post">
-                                <a href="" class="btn btn-outline-primary btn-sm" title="Presensi Proyek">
-                                    <i class="fas fa-window-restore"></i>
+                                <a href="{{url("proyek/{$proyek->id_proyek}")}}" class="btn btn-outline-primary btn-sm" title="Daftar Pekerjaan">
+                                    <i class="fas fa-info-circle"></i>
                                 </a>
                                 <a href="{{url("proyek/{$proyek->id_proyek}/edit")}}" class="btn btn-outline-secondary btn-sm" title="Edit">
                                     <i class="fas fa-edit"></i>

@@ -111,4 +111,17 @@ class PekerjaanController extends Controller
 
         return redirect()->route('pekerjaan.index')->with('success','Berhasil Menghapus pekerjaan');
     }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getMeta(Request $request)
+    {
+        $pekerjaanMeta = PekerjaanMeta::all()->where('id_pekerjaan',$request->id_pekerjaan)->pluck("nama_meta","id_meta");
+        return json_encode($pekerjaanMeta);
+        // return $pekerjaan->pekerjaanMeta()->select('id_meta', 'nama_meta')->get();
+    }
 }
