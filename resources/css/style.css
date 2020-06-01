@@ -19,3 +19,21 @@
 label{
   font-weight: bold;
 }
+
+@media print{
+  /* @page { */
+  /* size: 85mm 55mm; */
+  /* size: A4 landscape; */
+  /* margin: 0mm; */
+  /* } */
+  
+  /* #print { */
+  /* size: 85mm 55mm; */
+  /* } */
+
+
+  .garis img{
+    display: inline
+  }
+
+}

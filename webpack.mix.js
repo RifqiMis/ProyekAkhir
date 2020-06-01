@@ -12,11 +12,26 @@ const mix = require('laravel-mix');
  */
 
 mix.js([
-      'resources/js/app.js',
-      'resources/js/custom.js',
-   ], 
+   'resources/js/app.js',
+   'resources/js/custom.js',
+],
    'public/js')
    .sass('resources/sass/app.scss', 'public/css')
    .styles([
       'resources/css/style.css',
    ], 'public/css/style.css');
+
+/**
+ * Fix for instascan as detailed in https://github.com/webpack-contrib/css-loader/issues/447#issuecomment-285600014
+ */
+mix.webpackConfig({
+   node: {
+      fs: "empty"
+   }
+});
+
+mix.babel([
+   'resources/js/es6pg.js'
+],
+   'public/js/all.js'
+);

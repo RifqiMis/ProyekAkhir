@@ -1,1 +1,39 @@
-.active{font-weight:bolder}.nav-item{margin-left:10px}.col-form-label{text-align:right}.img-table{max-height:50px}label{font-weight:700}
+
+
+.active{
+  font-weight: bolder;
+}
+
+.nav-item {
+    margin-left: 10px;
+}
+
+.col-form-label {
+  text-align: right;
+}
+
+.img-table{
+  max-height: 50px;
+}
+
+label{
+  font-weight: bold;
+}
+
+@media print{
+  /* @page { */
+  /* size: 85mm 55mm; */
+  /* size: A4 landscape; */
+  /* margin: 0mm; */
+  /* } */
+  
+  /* #print { */
+  /* size: 85mm 55mm; */
+  /* } */
+
+
+  .garis img{
+    display: inline
+  }
+
+}
