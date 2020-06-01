@@ -39,7 +39,16 @@ Route::group(['middleware'=>['auth','checkRole:admin,manajer']],function(){
     Route::resource('pegawai', 'PegawaiController');
     Route::resource('jam-kerja', 'JamKerjaController');
     Route::resource('kelompok_pegawai', 'KelompokPegawaiController');
+    Route::resource('riwayat-pekerjaan', 'RiwayatPekerjaanController');
     // Route::get('pegawai', 'PegawaiController@index');
+    Route::get('pekerjaan/{id_pekerjaan}/meta', 'PekerjaanController@getMeta');
+
 });
+
+
+// route test QrCode
+// Route::get('qrcode', function () {
+//     return QrCode::size(300)->generate('A basic example of QR code!');
+// });
 
 
