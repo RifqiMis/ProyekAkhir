@@ -45,7 +45,7 @@
     </div>
 </div>
 
-<script>
+<script type="application/javascript">
     setTimeout(function() {
         $('.alert').fadeOut();
     }, 3000);

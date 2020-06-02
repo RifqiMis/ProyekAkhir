@@ -6,7 +6,7 @@
 @endsection
 
 @section('content')
-    
+
     <div class="container">
         <div style="margin-bottom:7%">
             <h3 class="text-center">Pegawai</h3>
@@ -24,7 +24,9 @@
                 <tr>
                     <th scope="col">No</th>
                     <th scope="col">SSN</th>
-                    <th scope="col">Pegawai</th>
+                    <th scope="col">Nama</th>
+                    <th scope="col">Jabatan</th>
+                    <th scope="col">Kelompok Kerja</th>
                     <th scope="col">Foto</th>
                     <th scope="col">Pilihan</th>
                 </tr>
@@ -33,19 +35,25 @@
                     @foreach($pegawais as $iteration => $pegawai)
                     <tr>
                         <td>{{$iteration+1}}</td>
-                        <td><?= QrCode::size(80)->generate($pegawai->ssn) ?> </td>
+                        <td>{{$pegawai->ssn}} </td>
                         <td>{{$pegawai->nama_pegawai}} </td>
+                        <td> 
+                            {{$pegawai->jabatan->nama_jabatan}}
+                        </td>
+                        <td> 
+                            {{$pegawai->kelompok->nama_kelompok_pegawai}}
+                        </td>
                         <td>
                             @if($pegawai->foto)
                             <img src="{{asset('storage/'.$pegawai->foto)}}" class="img-table">
                             @endif
                         </td>
                         <td>
-                            <a href="#" value="{{ action('PegawaiController@show',$pegawai->id_pegawai) }}" class="btn btn-xs btn-info modalMd" data-toggle="modal" data-target="#modalMd"><span class="glyphicon glyphicon-eye-open"></span></a>
                             <form action="{{url("pegawai/{$pegawai->id_pegawai}")}}" method="post">
-                                <a href="" class="btn btn-outline-info btn-sm" title="Cetak QR">
+                                <a href="#" value="{{ action('PegawaiController@show',$pegawai->id_pegawai) }}" class="btn btn-sm btn-outline-info modalMd" data-toggle="modal" data-target="#modalMd" title="Kartu Pegawai"><i class="fas fa-print"></i></a>
+                                {{-- <a href="{{url("pegawai/{$pegawai->id_pegawai}")}}" class="btn btn-outline-info btn-sm" title="Lihat QR Code Pegawai">
                                     <i class="fas fa-print"></i>
-                                </a>
+                                </a> --}}
                                 <a href="{{url("pegawai/{$pegawai->id_pegawai}/edit")}}" class="btn btn-outline-secondary btn-sm" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
@@ -64,20 +72,5 @@
         </div>
     </div>
 
-    {{-- Modal --}}
-    <div class="modal fade" id="modalMd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modalMdTitle"></h4>
-                </div>
-                <div class="modal-body">
-                    <div class="modalError"></div>
-                    <div id="modalMdContent"></div>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
