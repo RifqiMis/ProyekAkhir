@@ -3,8 +3,10 @@
 namespace Illuminate\Http\Client;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\HandlerStack;
+use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
 
 class PendingRequest
@@ -245,9 +247,7 @@ class PendingRequest
     public function withBasicAuth(string $username, string $password)
     {
         return tap($this, function ($request) use ($username, $password) {
-            return $this->options = array_merge_recursive($this->options, [
-                'auth' => [$username, $password],
-            ]);
+            return $this->options['auth'] = [$username, $password];
         });
     }
 
@@ -261,9 +261,7 @@ class PendingRequest
     public function withDigestAuth($username, $password)
     {
         return tap($this, function ($request) use ($username, $password) {
-            return $this->options = array_merge_recursive($this->options, [
-                'auth' => [$username, $password, 'digest'],
-            ]);
+            return $this->options['auth'] = [$username, $password, 'digest'];
         });
     }
 
@@ -276,22 +274,23 @@ class PendingRequest
      */
     public function withToken($token, $type = 'Bearer')
     {
-        return $this->withHeaders([
-            'Authorization' => trim($type.' '.$token),
-        ]);
+        return tap($this, function ($request) use ($token, $type) {
+            return $this->options['headers']['Authorization'] = trim($type.' '.$token);
+        });
     }
 
     /**
      * Specify the cookies that should be included with the request.
      *
      * @param  array  $cookies
+     * @param  string  $domain
      * @return $this
      */
-    public function withCookies(array $cookies)
+    public function withCookies(array $cookies, string $domain)
     {
-        return tap($this, function ($request) use ($cookies) {
+        return tap($this, function ($request) use ($cookies, $domain) {
             return $this->options = array_merge_recursive($this->options, [
-                'cookies' => $cookies,
+                'cookies' => CookieJar::fromArray($cookies, $domain),
             ]);
         });
     }
@@ -304,9 +303,7 @@ class PendingRequest
     public function withoutRedirecting()
     {
         return tap($this, function ($request) {
-            return $this->options = array_merge_recursive($this->options, [
-                'allow_redirects' => false,
-            ]);
+            return $this->options['allow_redirects'] = false;
         });
     }
 
@@ -318,9 +315,7 @@ class PendingRequest
     public function withoutVerifying()
     {
         return tap($this, function ($request) {
-            return $this->options = array_merge_recursive($this->options, [
-                'verify' => false,
-            ]);
+            return $this->options['verify'] = false;
         });
     }
 
@@ -382,12 +377,26 @@ class PendingRequest
      * Issue a GET request to the given URL.
      *
      * @param  string  $url
-     * @param  array  $query
+     * @param  array|string|null  $query
      * @return \Illuminate\Http\Client\Response
      */
-    public function get(string $url, array $query = [])
+    public function get(string $url, $query = null)
     {
         return $this->send('GET', $url, [
+            'query' => $query,
+        ]);
+    }
+
+    /**
+     * Issue a HEAD request to the given URL.
+     *
+     * @param  string  $url
+     * @param  array|string|null  $query
+     * @return \Illuminate\Http\Client\Response
+     */
+    public function head(string $url, $query = null)
+    {
+        return $this->send('HEAD', $url, [
             'query' => $query,
         ]);
     }
@@ -463,6 +472,10 @@ class PendingRequest
         $url = ltrim(rtrim($this->baseUrl, '/').'/'.ltrim($url, '/'), '/');
 
         if (isset($options[$this->bodyFormat])) {
+            if ($this->bodyFormat === 'multipart') {
+                $options[$this->bodyFormat] = $this->parseMultipartBodyFormat($options[$this->bodyFormat]);
+            }
+
             $options[$this->bodyFormat] = array_merge(
                 $options[$this->bodyFormat], $this->pendingFiles
             );
@@ -472,9 +485,10 @@ class PendingRequest
 
         return retry($this->tries ?? 1, function () use ($method, $url, $options) {
             try {
+                $laravelData = $this->parseRequestData($method, $url, $options);
+
                 return tap(new Response($this->buildClient()->request($method, $url, $this->mergeOptions([
-                    'laravel_data' => $options[$this->bodyFormat] ?? [],
-                    'query' => $this->parseQueryParams($url),
+                    'laravel_data' => $laravelData,
                     'on_stats' => function ($transferStats) {
                         $this->transferStats = $transferStats;
                     },
@@ -490,6 +504,46 @@ class PendingRequest
                 throw new ConnectionException($e->getMessage(), 0, $e);
             }
         }, $this->retryDelay ?? 100);
+    }
+
+    /**
+     * Parse multi-part form data.
+     *
+     * @param  array  $data
+     * @return array|array[]
+     */
+    protected function parseMultipartBodyFormat(array $data)
+    {
+        return collect($data)->map(function ($value, $key) {
+            return is_array($value) ? $value : ['name' => $key, 'contents' => $value];
+        })->values()->all();
+    }
+
+    /**
+     * Get the request data as an array so that we can attach it to the request for convenient assertions.
+     *
+     * @param  string  $method
+     * @param  string  $url
+     * @param  array  $options
+     * @return array
+     */
+    protected function parseRequestData($method, $url, array $options)
+    {
+        $laravelData = $options[$this->bodyFormat] ?? $options['query'] ?? [];
+
+        $urlString = Str::of($url);
+
+        if (empty($laravelData) && $method === 'GET' && $urlString->contains('?')) {
+            $laravelData = (string) $urlString->after('?');
+        }
+
+        if (is_string($laravelData)) {
+            parse_str($laravelData, $parsedData);
+
+            $laravelData = is_array($parsedData) ? $parsedData : [];
+        }
+
+        return $laravelData;
     }
 
     /**
@@ -585,7 +639,7 @@ class PendingRequest
     /**
      * Execute the "before sending" callbacks.
      *
-     * @param  \GuzzleHttp\Psr7\RequestInterface
+     * @param  \GuzzleHttp\Psr7\RequestInterface  $request
      * @param  array  $options
      * @return \Closure
      */
@@ -608,19 +662,6 @@ class PendingRequest
     public function mergeOptions(...$options)
     {
         return array_merge_recursive($this->options, ...$options);
-    }
-
-    /**
-     * Parse the query parameters in the given URL.
-     *
-     * @param  string  $url
-     * @return array
-     */
-    public function parseQueryParams(string $url)
-    {
-        return tap([], function (&$query) use ($url) {
-            parse_str(parse_url($url, PHP_URL_QUERY), $query);
-        });
     }
 
     /**

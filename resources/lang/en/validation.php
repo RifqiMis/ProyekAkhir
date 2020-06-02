@@ -133,6 +133,10 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'nama_jabatan' => [
+            'required' => ':attribute tidak boleh kosong',
+            'unique' => ':attribute sudah ada',
+        ]
     ],
 
     /*

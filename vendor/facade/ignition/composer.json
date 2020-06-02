@@ -16,7 +16,7 @@
         "facade/flare-client-php": "^1.0",
         "facade/ignition-contracts": "^1.0",
         "filp/whoops": "^2.4",
-        "illuminate/support": "^7.0",
+        "illuminate/support": "^7.0|^8.0",
         "monolog/monolog": "^2.0",
         "scrivo/highlight.php": "^9.15",
         "symfony/console": "^5.0",
@@ -28,12 +28,15 @@
         "orchestra/testbench": "5.0"
     },
     "suggest": {
-        "laravel/telescope": "^2.0"
+        "laravel/telescope": "^3.1"
     },
     "config": {
         "sort-packages": true
     },
     "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        },
         "laravel": {
             "providers": [
                 "Facade\\Ignition\\IgnitionServiceProvider"

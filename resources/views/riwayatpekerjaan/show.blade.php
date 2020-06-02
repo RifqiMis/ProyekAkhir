@@ -6,7 +6,6 @@
 
 @section('content')
 <div>
-    <button onclick="myFunction()">Try it</button>
     <button onclick="printDiv('print')" class="btn btn-info" title="Cetak Kartu"><i class="fas fa-print"></i> .pdf</button> 
     <button onclick="downloadDom('print')" class="btn btn-success" title="Cetak Kartu"><i class="fas fa-print"></i> .jpg</button> 
 </div>
@@ -73,30 +72,19 @@
 </script>
 
 <script type="application/javascript"> 
-    
-function myFunction() {
-    // var pekerjaan = $('#pekerjaan').val(); 
-    // var proyek = $('#proyek').val(); 
-    // if(proyek != ''){
-    //     alert(proyek)
-    // }else{
-    //     alert($('#pekerjaan').val())
-    // }
-    alert()
-}
 
-function downloadDom(div){
-    // Nama file jpg
-    nama = $('#proyek').html() + ' ' + $('#pekerjaan').html()
-    // // -- standar
-    domtoimage.toBlob(document.getElementById(div))
-    .then(function (blob) {
-        if(nama){
-            window.saveAs(blob,nama+".png");
-        }else{
-            window.saveAs(blob, "Pekerjaan.png");
-        }
-    });
+    function downloadDom(div){
+        // Nama file jpg
+        nama = $('#proyek').html() + ' ' + $('#pekerjaan').html()
+        // // -- standar
+        domtoimage.toBlob(document.getElementById(div))
+        .then(function (blob) {
+            if(nama){
+                window.saveAs(blob,nama+".png");
+            }else{
+                window.saveAs(blob, "Pekerjaan.png");
+            }
+        });
 
     // // -- resize to big 
     // var node = document.getElementById(div);

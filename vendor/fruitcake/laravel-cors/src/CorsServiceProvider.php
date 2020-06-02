@@ -21,6 +21,16 @@ class CorsServiceProvider extends BaseServiceProvider
         $this->app->singleton(CorsService::class, function ($app) {
             $config = $app['config']->get('cors');
 
+            if ($config['exposed_headers'] && !is_array($config['exposed_headers'])) {
+                throw new \RuntimeException('CORS config `exposed_headers` should be `false` or an array');
+            }
+
+            foreach (['allowed_origins', 'allowed_origins_patterns',  'allowed_headers', 'allowed_methods'] as $key) {
+                if (!is_array($config[$key])) {
+                    throw new \RuntimeException('CORS config `' . $key . '` should be an array');
+                }
+            }
+
             // Convert case to supported options
             $options = [
                 'supportsCredentials' => $config['supports_credentials'],
