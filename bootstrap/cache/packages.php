@@ -24,17 +24,6 @@
       0 => 'Fruitcake\\Cors\\CorsServiceProvider',
     ),
   ),
-  'intervention/image' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Intervention\\Image\\ImageServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'Image' => 'Intervention\\Image\\Facades\\Image',
-    ),
-  ),
   'laravel/tinker' => 
   array (
     'providers' => 
@@ -72,18 +61,6 @@
     'aliases' => 
     array (
       'QrCode' => 'SimpleSoftwareIO\\QrCode\\Facades\\QrCode',
-    ),
-  ),
-  'verumconsilium/laravel-browsershot' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'VerumConsilium\\Browsershot\\BrowsershotServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'PDF' => 'VerumConsilium\\Browsershot\\Facades\\PDF',
-      'Screenshot' => 'VerumConsilium\\Browsershot\\Facades\\Screenshot',
     ),
   ),
 );

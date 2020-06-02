@@ -12,10 +12,34 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    {{-- <script src="{{ asset('js/all.js') }}" defer></script> --}}
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+
+    {{-- JQuery --}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <script>
+        // Open Modal
+        $(document).on('ajaxComplete ready', function () {
+            $('.modalMd').off('click').on('click', function () {
+                $('#modalMdContent').load($(this).attr('value'));
+                $('#modalMdTitle').html($(this).attr('title'));
+            });
+        });
+
+        // print div
+        function printDiv(divName) {
+             var printContents = document.getElementById(divName).innerHTML;
+             var originalContents = document.body.innerHTML;
+             document.body.innerHTML = printContents;
+             window.print();
+             document.body.innerHTML = originalContents;
+             location.reload()
+            }  
+        </script>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -43,25 +67,17 @@
                                 <li class="nav-item {{(url("/proyek") == url()->current()) ? 'active' : '' }}"><a class="nav-link" class=".navbar-men" href="{{ url('/proyek') }}">Proyek</a></li>
                             @endif
                             @if (Auth::user()->role==='admin')
-                                <li class="nav-item dropdown {{(url("/pekerjaan") == url()->current()) ? 'active' : '' }}">
-                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                        Pekerjaan <span class="caret"></span>
+                                <li class="nav-item {{(url("/pekerjaan") == url()->current()) ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{url('/pekerjaan')  }}">
+                                        Pekerjaan
                                     </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="{{url('/pekerjaan')  }}">
-                                        Master Pekerjaan
-                                        </a>
-                                        <a class="dropdown-item" href="{{url('/cetak_pekerjaan')  }}">
-                                        Cetak Pekerjaan
-                                        </a>
-                                    </div>
                                 </li>
-                                <li class="nav-item dropdown {{(url("/jabatan") == url()->current()) ? 'active' : '' }}">
+                                <li class="nav-item dropdown {{(url("/pegawai") == url()->current()) ? 'active' : '' }} {{(url("/kelompok_pegawai") == url()->current()) ? 'active' : '' }} {{(url("/jabatan") == url()->current()) ? 'active' : '' }}">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                         Pegawai <span class="caret"></span>
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" class="logout" href="">
+                                        <a class="dropdown-item" class="logout" href="{{url('/pegawai')  }}">
                                            Daftar Pegawai
                                         </a>
                                         <a class="dropdown-item" class="logout" href="{{url('/jabatan')  }}">
@@ -72,9 +88,9 @@
                                         </a>
                                     </div>
                                 </li>
-                                <li class="nav-item {{(url("/jam_kerja") == url()->current()) ? 'active' : '' }}">
-                                    <a class="nav-link" href="{{ url('/') }}">
-                                        Jam Kerja
+                                <li class="nav-item {{(url("/jam-kerja") == url()->current()) ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ url('/jam-kerja') }}">
+                                        Jadwal Kerja
                                     </a>
                                 </li>
                             @endif
@@ -121,6 +137,22 @@
                 </div>
             </div>
         </main>
+
+    {{-- Modal --}}
+    <div class="modal fade" id="modalMd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalMdTitle"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="modalError"></div>
+                    <div id="modalMdContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 </body>
 <!-- Footer -->
