@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -11,9 +11,13 @@
     <title>PT. Lundin - @yield('title')</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}"></script>
     {{-- <script src="{{ asset('js/all.js') }}" defer></script> --}}
 
+    {{-- Chart --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" type="application/javascript" charset="utf-8">
+    </script>
+    
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -132,12 +136,8 @@
         </nav>
 
         <main class="py-4">
-            <div class="container">
-                <div class="bg-white shadow-sm">
-                    <br>
+            <div class="container">     
                     @yield('content')
-                    <br>
-                </div>
             </div>
         </main>
 
