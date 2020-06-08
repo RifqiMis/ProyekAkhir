@@ -40,4 +40,9 @@ class PekerjaanMeta extends Model
     {
         return $this->belongsTo('App\RiwayatPekerjaan','id_meta');
     }
+
+    public function riwayatPresensi()
+    {
+        return $this->hasMany('App\RiwayatPresensi','id_meta');
+    }
 }

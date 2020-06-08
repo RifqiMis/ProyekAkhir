@@ -19,4 +19,9 @@ class Pegawai extends Model
         return $this->belongsTo('App\KelompokPegawai','id_kelompok');
     }
 
+    public function riwayatPresensi()
+    {
+        return $this->hasMany('App\RiwayatPresensi','id_pegawai');
+    }
+
 }

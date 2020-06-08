@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use Illuminate\Support\Carbon;
 
 class Helper
 {
@@ -23,6 +24,25 @@ class Helper
                 $array[$i] = 'Minggu';
         }
         return implode(', ',$array);
+    }
+
+    public static function day_to_hari($isi){
+        if($isi=='Mon'){
+            $isi = 1;
+        }elseif($isi=='Tue'){
+            $isi = 2;
+        }elseif($isi=='Wed'){
+            $isi = 3;
+        }elseif($isi=='Thu'){
+            $isi = 4;
+        }elseif($isi=='Fri'){
+            $isi = 5;
+        }elseif($isi=='Sat'){
+            $isi = 6;
+        }elseif($isi=='Sun'){
+            $isi = 7;
+        }
+        return $isi;
     }
 
     public static function jam_min($minutes){
@@ -58,5 +78,63 @@ class Helper
             return '0'.$id;
         }else
             return $id;
+    }
+
+    //convert 2 time to diff
+    public static function time2Diff($waktu_in,$waktu_out){
+        $date1 = Carbon::parse($waktu_in);
+        $date2 = Carbon::parse($waktu_out);
+        return $date2->diff($date1)->format("%H:%I:%S");
+    }
+
+
+    public static function SumTime($times) {
+        $minutes = 0; //declare minutes either it gives Notice: Undefined variable
+        // loop throught all the times
+        foreach ($times as $time) {
+            list($hour, $minute) = explode(':', $time);
+            $minutes += $hour * 60;
+            $minutes += $minute;
+        }
+    
+        $hours = floor($minutes / 60);
+        $minutes -= $hours * 60;
+    
+        // the time already formatted
+        $jam = sprintf('%02d:%02d', $hours, $minutes);
+
+        // total jam format
+        $array1=explode(':',$jam);
+        $total_jam=ltrim($array1[0],'0');
+        $total_menit=ltrim($array1[1],'0');
+        if($total_jam!=0&&$total_menit!=0){
+            $result = $total_jam.' jam '.$total_menit.' menit';
+        }elseif($total_jam!=0){
+            $result = $total_jam.' jam ';
+        }elseif($total_menit!=0){
+            $result = $total_menit.' menit ';
+        }else{
+            $result = '-';
+        }
+        
+        return $result;
+    }
+
+    public static function humanJam($jam){
+        // total jam format
+        $array1=explode(':',$jam);
+        $total_jam=ltrim($array1[0],'0');
+        $total_menit=ltrim($array1[1],'0');
+        if($total_jam!=0&&$total_menit!=0){
+            $result = $total_jam.' jam '.$total_menit.' menit';
+        }elseif($total_jam!=0){
+            $result = $total_jam.' jam ';
+        }elseif($total_menit!=0){
+            $result = $total_menit.' menit ';
+        }else{
+            $result = '-';
+        }
+        
+        return $result;
     }
 }

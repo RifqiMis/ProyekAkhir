@@ -4,19 +4,19 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RiwayatPekerjaan extends Model
+class RiwayatPresensi extends Model
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
-    protected $table = 'riwayat_pekerjaan';
-    protected $primaryKey = 'id';
+    protected $table = 'riwayat_presensi';
+    protected $primaryKey = 'id_presensi';
 
     public function proyek()
     {
         return $this->belongsTo('App\Proyek','id_proyek');
+    }
+
+    public function pegawai()
+    {
+        return $this->belongsTo('App\Pegawai','id_pegawai');
     }
 
     public function pekerjaan()

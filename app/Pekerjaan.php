@@ -18,4 +18,9 @@ class Pekerjaan extends Model
     {
         return $this->hasMany('App\RiwayatPekerjaan','id_pekerjaan');
     }
+
+    public function riwayatPresensi()
+    {
+        return $this->hasMany('App\RiwayatPresensi','id_pekerjaan');
+    }
 }
