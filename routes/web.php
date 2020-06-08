@@ -13,13 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
-Auth::routes();
-
-Route::get('/', 'HomeController@index')->name('home');
+Route::resource('/', 'PresensiController');
+Route::get('/presensi-pegawai', 'PresensiController@pegawai')->name('presensi-pegawai');
+Route::get('/presensi-pekerjaan', 'PresensiController@pekerjaan')->name('presensi-pekerjaan');
 
 Auth::routes();
 
@@ -29,26 +26,33 @@ Route::match(["GET", "POST"], "/register", function(){
     return redirect("/login");
 })->name("register");
 
-// Route::get('pegawai', 'PegawaiController@index')->middleware('auth');
+Route::group(['middleware'=>['auth','checkRole:admin,manajer,hrd']],function(){
+    Route::resource('home', 'HomeController');
+    Route::get('/cari', 'HomeController@cari')->name('cari');
 
-Route::group(['middleware'=>['auth','checkRole:admin,manajer']],function(){
-    Route::resource('jabatan', 'JabatanController');
-    Route::resource('pekerjaan', 'PekerjaanController');
-    Route::resource('pekerjaan-meta', 'PekerjaanMetaController');
-    Route::resource('proyek', 'ProyekController');
-    Route::resource('pegawai', 'PegawaiController');
-    Route::resource('jam-kerja', 'JamKerjaController');
-    Route::resource('kelompok_pegawai', 'KelompokPegawaiController');
-    Route::resource('riwayat-pekerjaan', 'RiwayatPekerjaanController');
-    // Route::get('pegawai', 'PegawaiController@index');
+    // Ajax
     Route::get('pekerjaan/{id_pekerjaan}/meta', 'PekerjaanController@getMeta');
+    Route::get('proyek-total', 'ProyekController@total')->name('proyek-total');
+    Route::any('pegawai-terlambat', 'RiwayatPresensiController@terlambat')->name('pegawai-terlambat');
+    Route::get('akumulasi-presensi', 'RiwayatPresensiController@akumulasi')->name('akumulasi-presensi');
 
 });
 
+Route::group(['middleware'=>['auth','checkRole:admin,manajer']],function(){
+    Route::resource('jabatan', 'JabatanController');
+    Route::resource('jam-kerja', 'JamKerjaController');
+    Route::resource('kelompok_pegawai', 'KelompokPegawaiController');
+    Route::resource('pegawai', 'PegawaiController');
+    Route::resource('pekerjaan', 'PekerjaanController');
+    Route::resource('pekerjaan-meta', 'PekerjaanMetaController');
+    Route::resource('proyek', 'ProyekController');
+    Route::resource('presensi-proyek', 'PresensiProyekController');
+    Route::any('presensi-proyek/laporan', 'PresensiProyekController@laporan');
+    Route::resource('riwayat-pekerjaan', 'RiwayatPekerjaanController');
 
-// route test QrCode
-// Route::get('qrcode', function () {
-//     return QrCode::size(300)->generate('A basic example of QR code!');
-// });
+    // Ajax
+    Route::any('laporan-harian', 'PresensiProyekController@laporan')->name('laporan-harian');
+});
+
 
 
