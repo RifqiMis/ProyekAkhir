@@ -9,6 +9,8 @@ use App\PekerjaanMeta;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class ProyekController extends Controller
 {
@@ -17,10 +19,21 @@ class ProyekController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $proyek = Proyek::paginate(10);
-        return view('proyek.index', ['proyeks' => $proyek]);
+        $proyek = DB::table('proyek');
+        if(!empty($request->cari)){
+            $cari = $request->cari;
+            $proyek = $proyek->where(function($q) use ($cari){
+                $q->where('deskripsi_proyek','like',"%$cari%")
+                  ->orWhere('id_proyek','like',"%$cari%");
+            });
+        }
+        if($request->status != ''){
+            $proyek = $proyek->where('status_proyek',$request->status);        
+        }
+        $proyek = $proyek->paginate(10);
+        return view('proyek.index', ['proyeks' => $proyek->appends(['status' => $request->status,'cari' => $request->cari]),'input' => $request]);
     }
 
     /**
@@ -71,7 +84,12 @@ class ProyekController extends Controller
     {
         $proyek     = Proyek::find($id);
         $pekerjaan  = Pekerjaan::all();
-        $details    = RiwayatPekerjaan::where('id_proyek',$id)->paginate(10);
+        $details    = RiwayatPekerjaan::where('id_proyek',$id)
+        ->join('pekerjaan', 'pekerjaan.id_pekerjaan', '=', 'riwayat_pekerjaan.id_pekerjaan')
+        ->join('pekerjaan_meta', 'pekerjaan_meta.id_meta', '=', 'riwayat_pekerjaan.id_meta')
+        ->orderBy('pekerjaan.nama_pekerjaan','ASC')
+        ->orderBy('pekerjaan_meta.nama_meta','ASC')
+        ->paginate(10);
         return view('proyek.detail', compact(['proyek','pekerjaan','details']));
     }
 
@@ -111,6 +129,9 @@ class ProyekController extends Controller
         $data = Proyek::find($id);
         $data->deskripsi_proyek = $request->deskripsi_proyek;
         $data->status_proyek = $request->status_proyek;
+        if($data->status_proyek == 0){
+            $data->tanggal_selesai = Carbon::now();
+        }
         $new_foto = $request->file('foto');
         if($new_foto){
             if($data->foto && file_exists(storage_path('app/public/' .$data->foto))){
@@ -142,5 +163,12 @@ class ProyekController extends Controller
         $proyek->delete();
 
         return redirect()->route('proyek.index')->with('success','Berhasil Menghapus proyek');
+    }
+
+    public function total()
+    {
+        $total[0]   = Proyek::where('status_proyek',0)->get()->count();
+        $total[1]   = Proyek::where('status_proyek',1)->get()->count();
+        return json_encode($total);
     }
 }

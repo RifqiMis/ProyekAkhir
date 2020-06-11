@@ -74,9 +74,7 @@
         
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js" type="module"></script>
-
-     <script type="application/javascript"> 
+<script type="application/javascript"> 
     //  Ajax untuk meta pekerjaan dropdown  
         $(document).ready(function() {
             $('select[name="id_pekerjaan"]').on('change', function() {
@@ -100,7 +98,6 @@
                 }
             });
         });
-
 </script>
 
 @endsection

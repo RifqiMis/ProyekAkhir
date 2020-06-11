@@ -47,7 +47,7 @@
     @include('components.notifikasi')
     {{-- isi konten --}}
         <div class="container">
-            <form action="{{route('proyek.store')}}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('proyek.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group row">
                     <label class="col-2 col-form-label">Kode Proyek</label>

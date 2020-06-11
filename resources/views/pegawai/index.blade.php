@@ -19,6 +19,45 @@
 
         {{-- isi konten --}}
         <div class="container">
+            <form action="{{ url('pegawai') }}" method="GET">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <label class="input-group-text" for="inputGroupSelect01">Jabatan</label>
+                            </div>
+                            <select class="custom-select" id="inputGroupSelect01" name="id_jabatan">
+                              <option value="">Semua</option>
+                              @foreach ($jabatans as $key => $val)
+                                <option value="{{ $val->id_jabatan }}" {{ $val->id_jabatan == $input->id_jabatan ? 'selected' : '' }}>{{ $val->nama_jabatan }}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <label class="input-group-text" for="inputGroupSelect01">Kelompok</label>
+                            </div>
+                            <select class="custom-select" id="inputGroupSelect01" name="id_kelompok">
+                                <option value="">Semua</option>
+                                @foreach ($kelompoks as $key => $val)
+                                    <option value="{{ $val->id_kelompok_pegawai }}" {{ $val->id_kelompok_pegawai == $input->id_kelompok ? 'selected' : '' }}>{{ $val->nama_kelompok_pegawai }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                        <input type="text" name="cari" class="form-control" placeholder="Cari Proyek" value="@if (!empty($input->cari)){{$input->cari}}@endif">
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+                    </div>                    
+                </div>
+            </form>
+            <br>
             <table class="table table-hover">
                 <thead>
                 <tr>

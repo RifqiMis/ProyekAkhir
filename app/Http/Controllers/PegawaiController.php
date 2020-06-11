@@ -28,10 +28,22 @@ class PegawaiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pegawai = Pegawai::with(['jabatan','kelompok'])->paginate(10);
-        return view('pegawai.index', ['pegawais' => $pegawai]);
+        $jabatans = Jabatan::all();
+        $kelompoks = KelompokPegawai::all();
+        $pegawai = Pegawai::orderBy('nama_pegawai','ASC');
+        if(!empty($request->cari)){
+            $pegawai = $pegawai->where('nama_pegawai','like',"%$request->cari%");
+        }
+        if($request->id_kelompok != ''){
+            $pegawai = $pegawai->where('id_kelompok',$request->id_kelompok);    
+        }
+        if($request->id_jabatan != ''){
+            $pegawai = $pegawai->where('id_jabatan',$request->id_jabatan);    
+        }
+        $pegawai = $pegawai->paginate(10);
+        return view('pegawai.index', ['pegawais' => $pegawai->appends(['id_kelompok' => $request->id_kelompok,'id_jabatan' => $request->id_jabatan,'cari' => $request->cari]),'input' => $request,'jabatans' => $jabatans,'kelompoks' => $kelompoks]);
     }
 
     /**
@@ -165,5 +177,19 @@ class PegawaiController extends Controller
         $pegawai->delete();
 
         return redirect()->route('pegawai.index')->with('success','Berhasil Menghapus pegawai');
+    }
+
+    // Ajax Cari
+    public function cari(Request $request){
+        $cari = $request->cari;
+        // $cari ='ana';
+        $data = Pegawai::whereHas('jabatan',function($q) use ($cari){
+            $q->where('nama_pegawai','like',"%$cari%")
+              ->orWhere('ssn','like',"%$cari%")
+              ->orWhere('nama_jabatan','like',"%$cari%");
+        })->get();
+
+        // return $data;
+        return view('pegawai.cari',compact('data'))->renderSections()['content'];
     }
 }

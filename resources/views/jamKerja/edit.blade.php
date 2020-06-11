@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="container">
-        <h3 class="text-center">Tambah Jadwal Kerja</h3>
+        <h3 class="text-center">Edit Jadwal Kerja</h3>
     </div>
     <hr>
     <br>
@@ -36,7 +36,7 @@
                             </div>
                             <span for="" class="col-sm-1 col-form-label text-center">S/d</span>
                             <div class="col">
-                                <input type="time" name="jam_selesai_istirahat" class="form-control" value="{{ $data->jam_mulai_istirahat }}">
+                                <input type="time" name="jam_selesai_istirahat" class="form-control" value="{{ $data->jam_selesai_istirahat }}">
                             </div>
                         </div>
                         <div class="form-row form-group">

@@ -123,7 +123,6 @@
 
                 </div>
                 <div class="form-group row">
-                    {{-- <label class="col-1 col-form-label"></label> --}}
                     <div class="col-12">
                         <div class="text-center">
                             <button type="submit" class="btn btn-sm btn-primary mb-2">Simpan</button>

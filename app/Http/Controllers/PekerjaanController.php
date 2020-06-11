@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Pekerjaan;
 use App\PekerjaanMeta;
+use App\RiwayatPekerjaan;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -16,7 +17,9 @@ class PekerjaanController extends Controller
      */
     public function index()
     {
-        $pekerjaan = Pekerjaan::paginate(10);
+        $pekerjaan = Pekerjaan::
+        orderBy('nama_pekerjaan','ASC')
+        ->paginate(10);
         return view('pekerjaan.index', ['pekerjaans' => $pekerjaan]);
     }
 
@@ -58,7 +61,9 @@ class PekerjaanController extends Controller
     public function show($id)
     {
         $data = Pekerjaan::findOrFail($id);
-        $detail = PekerjaanMeta::where('id_pekerjaan', $id)->paginate(10);
+        $detail = PekerjaanMeta::where('id_pekerjaan', $id)
+        ->orderBy('nama_meta','ASC')
+        ->paginate(10);
         return view('pekerjaan.detail',['pekerjaan' => $data, 'details' => $detail]);
     }
 
@@ -122,6 +127,26 @@ class PekerjaanController extends Controller
     {
         $pekerjaanMeta = PekerjaanMeta::all()->where('id_pekerjaan',$request->id_pekerjaan)->pluck("nama_meta","id_meta");
         return json_encode($pekerjaanMeta);
-        // return $pekerjaan->pekerjaanMeta()->select('id_meta', 'nama_meta')->get();
+    }
+
+    public function getMetaKerja(Request $request)
+    {
+        $pekerjaanMeta = Pekerjaan::
+            join('riwayat_pekerjaan', 'pekerjaan.id_pekerjaan', '=', 'riwayat_pekerjaan.id_pekerjaan')
+            ->where('riwayat_pekerjaan.id_proyek',$request->id_proyek)
+            ->pluck("pekerjaan.nama_pekerjaan","pekerjaan.id_pekerjaan");
+        
+        return json_encode($pekerjaanMeta);
+    }
+
+    public function getMetaPresen(Request $request)
+    {
+        $pekerjaanMeta = PekerjaanMeta::
+            join('riwayat_pekerjaan', 'pekerjaan_meta.id_meta', '=', 'riwayat_pekerjaan.id_meta')
+            ->where('riwayat_pekerjaan.id_pekerjaan',$request->id_pekerjaan)
+            ->where('riwayat_pekerjaan.id_proyek',$request->id_proyek)
+            ->pluck("pekerjaan_meta.nama_meta","pekerjaan_meta.id_meta");
+        
+        return json_encode($pekerjaanMeta);
     }
 }

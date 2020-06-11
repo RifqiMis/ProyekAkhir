@@ -62,7 +62,7 @@ class KelompokPegawaiController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\KelompokPegawai  $kelompokPegawai
+     * @param  \App\KelompokPegawai  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -98,7 +98,7 @@ class KelompokPegawaiController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\KelompokPegawai  $kelompokPegawai
+     * @param  \App\KelompokPegawai  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
