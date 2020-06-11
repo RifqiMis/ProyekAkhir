@@ -32,8 +32,7 @@
                 width:50mm;
                 position:absolute;
                 margin-left:15mm;
-                display:none;
-                " class="img-bg">
+                " class="d-none d-print-block">
                 <div class="row">
                     <div class=" col-12 text-center" style="margin-bottom: 10px;">
                         <img src="{{asset('storage/logo.png')}}" style="width: 80px;"> 

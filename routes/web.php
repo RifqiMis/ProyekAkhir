@@ -52,6 +52,12 @@ Route::group(['middleware'=>['auth','checkRole:admin,manajer']],function(){
 
     // Ajax
     Route::any('laporan-harian', 'PresensiProyekController@laporan')->name('laporan-harian');
+    Route::any('pegawai-absen', 'RiwayatPresensiController@absen')->name('pegawai-absen');
+    Route::get('riwayat-pegawai', 'HomeController@pegawai')->name('riwayat-pegawai');
+    Route::any('pegawai-cari', 'PegawaiController@cari');
+    Route::get('pekerjaan/{id_proyek}/metaKerja', 'PekerjaanController@getMetaKerja');
+    Route::get('pekerjaan/{id_proyek}/{id_pekerjaan}/metaPresen', 'PekerjaanController@getMetaPresen');
+
 });
 
 

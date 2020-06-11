@@ -1,5 +1,4 @@
 const mix = require('laravel-mix');
-
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -30,8 +29,8 @@ mix.webpackConfig({
    }
 });
 
-mix.babel([
-   'resources/js/es6pg.js'
-],
-   'public/js/all.js'
-);
+// mix.babel([
+// 'resources/js/es6pg.js',
+// ],
+//    'public/js/all.js'
+// );
