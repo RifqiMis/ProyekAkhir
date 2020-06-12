@@ -21,17 +21,11 @@ label{
 }
 
 @media print{
-  /* @page { */
-  /* size: 85mm 55mm; */
-  /* size: A4 landscape; */
-  /* margin: 0mm; */
-  /* } */
+
+  #btn-print{
+    display: none;
+  }
   
-  /* #print { */
-  /* size: 85mm 55mm; */
-  /* } */
-
-
   .garis img{
     display: inline
   }
