@@ -7,7 +7,6 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="shortcut icon" href="{{asset('storage/logo.ico')}}" />
     <title>PT. Lundin - @yield('title')</title>
 
     <!-- Scripts -->

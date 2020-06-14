@@ -6,7 +6,7 @@
 @endsection
 
 @section('content')
-
+    @if (Auth::user()->role!='hrd')
     <div class="row">
         <div class="col-8">
             <div class="bg-white shadow-sm">
@@ -49,7 +49,6 @@
         </div>
     </div>
     <br>
-    @if (Auth::user()->role!='hrd')
     <div class="bg-white shadow-sm" id="rekap">
         <br>
         <div class="container">

@@ -9,9 +9,11 @@
     <div class="container">
         <div style="margin-bottom:7%">
             <h3 class="text-center">Proyek</h3>
+            @if (Auth::user()->role=='admin')
             <a href="{{url("proyek/create")}}" class="btn btn-primary  float-right">
                 <i class="fas fa-plus"></i> Tambah Data
             </a>
+            @endif
         </div>
 
         @include('components.notifikasi')
@@ -49,7 +51,9 @@
                     <th scope="col">Desain Kapal</th>
                     <th scope="col">Proyek</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Pilihan</th>
+                    @if (Auth::user()->role=='admin')
+                        <th scope="col">Pilihan</th>
+                    @endif
                 </tr>
                 </thead>
                 <tbody>
@@ -73,6 +77,7 @@
                                 </div>
                             @endif
                         </td>
+                    @if (Auth::user()->role=='admin')
                         <td>
                             <form action="{{url("proyek/{$proyek->id_proyek}")}}" method="post">
                                 <a href="{{url("proyek/{$proyek->id_proyek}")}}" class="btn btn-outline-primary btn-sm" title="Daftar Pekerjaan">
@@ -88,6 +93,7 @@
                                 {{ csrf_field() }}
                             </form>
                         </td>
+                    @endif
                     </tr>
                     @endforeach
                 </tbody>
