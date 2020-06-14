@@ -29,6 +29,8 @@ mix.webpackConfig({
    }
 });
 
+// mix.browserSync({ open: false, proxy: ‘nginx’ // replace with your web server container })
+
 // mix.babel([
 // 'resources/js/es6pg.js',
 // ],

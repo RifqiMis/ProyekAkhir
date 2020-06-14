@@ -25,11 +25,8 @@
                         </div>
                 </div>
             </form>
-            <button onclick="qrCam()">Buka Kamera</button>
-            {{-- <button onclick="scanner.stop()">Tutup Kamera</button> --}}
         </div>
     </div>
-    {{-- <script src="{{ asset('js/all.js') }}" type="module"></script> --}}
 
     <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js" type="module">
     </script>

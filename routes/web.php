@@ -15,20 +15,19 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::resource('/', 'PresensiController');
+Route::get('get', 'PresensiController@get')->name('get');
 Route::get('/presensi-pegawai', 'PresensiController@pegawai')->name('presensi-pegawai');
 Route::get('/presensi-pekerjaan', 'PresensiController@pekerjaan')->name('presensi-pekerjaan');
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'BerandaController@index')->name('home');
 
 Route::match(["GET", "POST"], "/register", function(){
     return redirect("/login");
 })->name("register");
 
 Route::group(['middleware'=>['auth','checkRole:admin,manajer,hrd']],function(){
-    Route::resource('home', 'HomeController');
-    Route::get('/cari', 'HomeController@cari')->name('cari');
+    Route::resource('home', 'BerandaController');
 
     // Ajax
     Route::get('pekerjaan/{id_pekerjaan}/meta', 'PekerjaanController@getMeta');
@@ -53,7 +52,7 @@ Route::group(['middleware'=>['auth','checkRole:admin,manajer']],function(){
     // Ajax
     Route::any('laporan-harian', 'PresensiProyekController@laporan')->name('laporan-harian');
     Route::any('pegawai-absen', 'RiwayatPresensiController@absen')->name('pegawai-absen');
-    Route::get('riwayat-pegawai', 'HomeController@pegawai')->name('riwayat-pegawai');
+    Route::get('riwayat-pegawai', 'BerandaController@pegawai')->name('riwayat-pegawai');
     Route::any('pegawai-cari', 'PegawaiController@cari');
     Route::get('pekerjaan/{id_proyek}/metaKerja', 'PekerjaanController@getMetaKerja');
     Route::get('pekerjaan/{id_proyek}/{id_pekerjaan}/metaPresen', 'PekerjaanController@getMetaPresen');

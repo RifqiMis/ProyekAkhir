@@ -62,7 +62,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-2 col-form-label">Foto</label>
+                    <label class="col-2 col-form-label" for="upload"><span class="badge badge-secondary">Unggah Foto</span></label>
                     <div class="col-10">
                         <input id="upload" class="col-form-label" type="file" name="foto" onchange="readURL(this);" class="form-control border-0">
                     </div>

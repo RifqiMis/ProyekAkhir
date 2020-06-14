@@ -3,7 +3,7 @@
     @if (!empty($data))
         @foreach ($data as $d)
         <tr>
-            <td>{{ $d->id_proyek }}</td>
+            <td>{{ $d->pegawai->ssn}}</td>
             <td>{{ $d->pegawai->nama_pegawai }}</td>
             <td>{{ $d->proyek->deskripsi_proyek }}</td>
             <td>{{ $d->pekerjaan->nama_pekerjaan.' '.$d->pekerjaanMeta->nama_meta }}</td>

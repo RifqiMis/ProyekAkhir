@@ -180,7 +180,10 @@ class PresensiController extends Controller
                         return redirect('')->with('success','Presensi Pekerjaan Berhasil' );
 
                     }else{
-                        return redirect("/presensi-pegawai?ssn=$request->ssn")->with('danger','Terjadi kesalahan !' );
+                        $data->waktu_in = Carbon::now();
+                        $data->save();
+                        return redirect('')->with('success','Presensi Pekerjaan Berhasil' );
+                        // return redirect("/presensi-pegawai?ssn=$request->ssn")->with('danger','Terjadi kesalahan !' );
                     }
 
                 // tentukan data hari itu kosong , kalau kosong isi waktu in jam masuk
@@ -269,5 +272,52 @@ class PresensiController extends Controller
     public function destroy(RiwayatPresensi $riwayatPresensi)
     {
         //
+    }
+
+    public function get()
+    {
+            $jadwal     = JamKerja::select('jam_pulang','jam_mulai_istirahat')->whereDate('tanggal_mulai','<=',Carbon::today()->toDateString())
+                ->whereDate('tanggal_akhir','>=',Carbon::today()->toDateString())
+                ->where('hari_kerja', 'like', '%'.Helper::day_to_hari(date('D')).'%')
+                ->where('default','n')
+                ->first()
+            ;
+
+            if(!$jadwal){
+                // Pengecekan Jadwal Defautl
+                $jadwal     = JamKerja::select('jam_pulang','jam_mulai_istirahat')->where('hari_kerja', 'like', '%'.Helper::day_to_hari(date('D')).'%')
+                    ->where('default','y')
+                    ->first()
+                ;
+            }
+
+
+        if($jadwal){
+
+            $sekarang = date('h:i');
+            $waktu_istirahat = date('h:i',strtotime($jadwal->jam_mulai_istirahat));
+            $waktu_pulang = date('h:i',strtotime($jadwal->jam_pulang));
+            
+            // mengecek pegawai
+            $data = RiwayatPresensi::where('waktu_out',NULL)
+            ->whereDate('waktu_in',date('Y-m-d'))
+            ->get();
+                
+            // perulangan pegawai
+            foreach ($data as $key => $item) {
+                
+                // pengecekan waktu sekarang jam istirahan , lalu dicheck out yang masih in dengan jam istirahat
+                if($sekarang == $waktu_istirahat){
+                    $item->waktu_out = date('Y-m-d h:i:s',strtotime($jadwal->jam_mulai_istirahat));
+                    $item->save();
+                }
+                
+                // pengecekan waktu sekarang jam pulang, lalu dicheck out yang masih in dengan jam pulang
+                elseif($sekarang == $waktu_pulang){
+                    $item->waktu_out = date('Y-m-d h:i:s',strtotime($jadwal->jam_pulang));
+                    $item->save();
+                }
+            }
+        }
     }
 }
