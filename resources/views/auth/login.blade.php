@@ -2,9 +2,9 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mb-4">
         <div class="col-md-8">
-            <div class="text-center mb-4">
+            <div class="text-center mb-4 mt-4">
                 <h3 class="mb-0">Sistem Manajemen Presensi</h3>
                 <h4>Proyek Kapal Departemen Produksi</h4>
             </div>

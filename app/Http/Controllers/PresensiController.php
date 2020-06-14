@@ -279,6 +279,8 @@ class PresensiController extends Controller
             $jadwal     = JamKerja::select('jam_pulang','jam_mulai_istirahat')->whereDate('tanggal_mulai','<=',Carbon::today()->toDateString())
                 ->whereDate('tanggal_akhir','>=',Carbon::today()->toDateString())
                 ->where('hari_kerja', 'like', '%'.Helper::day_to_hari(date('D')).'%')
+                ->whereTime('jam_masuk', '<=', Carbon::now())
+                ->whereTime('jam_pulang', '>=', Carbon::now()->subMinutes(5))
                 ->where('default','n')
                 ->first()
             ;
@@ -287,12 +289,15 @@ class PresensiController extends Controller
                 // Pengecekan Jadwal Defautl
                 $jadwal     = JamKerja::select('jam_pulang','jam_mulai_istirahat')->where('hari_kerja', 'like', '%'.Helper::day_to_hari(date('D')).'%')
                     ->where('default','y')
+                    ->whereTime('jam_masuk', '<=', Carbon::now())
+                    ->whereTime('jam_pulang', '>=', Carbon::now()->subMinutes(5))
                     ->first()
                 ;
             }
 
 
         if($jadwal){
+            return $jadwal;
 
             $sekarang = date('h:i');
             $waktu_istirahat = date('h:i',strtotime($jadwal->jam_mulai_istirahat));
