@@ -5,6 +5,39 @@ use Illuminate\Support\Carbon;
 
 class Helper
 {
+
+    public static function tanggal_idn($date, $his = false)
+    {
+        if($date == '0000-00-00 00:00:00' || $date == '0000-00-00' || empty($date) || $date == null)
+        {
+            return '-';
+        }
+        $BulanIndo = array("Januari",
+                        "Februari",
+                        "Maret",
+                        "April",
+                        "Mei",
+                        "Juni",
+                        "Juli",
+                        "Agustus",
+                        "September",
+                        "Oktober",
+                        "November",
+                        "Desember");
+
+        $tahun = substr($date, 0, 4);
+        $bulan = substr($date, 5, 2);
+        $tgl   = substr($date, 8, 2);
+
+
+        $result = $tgl . " " . $BulanIndo[(int)$bulan-1] . " ". $tahun;
+        if($his == true)
+        {
+            $result .= ', ' . substr($date, 11);
+        }
+        return($result);
+    }
+
     public static function hari($isi){
         $array = explode(',',$isi);
         for ($i=0; $i < count($array); $i++) { 

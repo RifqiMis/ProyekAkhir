@@ -7,7 +7,7 @@
 @section('content')
 <div>
     <button onclick="printDiv('print')" class="btn btn-info" title="Cetak Kartu"><i class="fas fa-print"></i> .pdf</button> 
-    <button onclick="downloadDom('print')" class="btn btn-success" title="Cetak Kartu"><i class="fas fa-print"></i> .jpg</button> 
+    <button onclick="downloadDom('print')" class="btn btn-success" title="Cetak Kartu"><i class="fas fa-print"></i> .png</button> 
 </div>
 <hr>
 <div style="margin-left:10%;">

@@ -32,7 +32,8 @@ class ProyekController extends Controller
         if($request->status != ''){
             $proyek = $proyek->where('status_proyek',$request->status);        
         }
-        $proyek = $proyek->paginate(10);
+        $proyek = $proyek->orderBy('created_at','desc')
+            ->paginate(10);
         return view('proyek.index', ['proyeks' => $proyek->appends(['status' => $request->status,'cari' => $request->cari]),'input' => $request]);
     }
 
@@ -167,8 +168,9 @@ class ProyekController extends Controller
 
     public function total()
     {
-        $total[0]   = Proyek::where('status_proyek',0)->get()->count();
-        $total[1]   = Proyek::where('status_proyek',1)->get()->count();
+        $total['grafik'][0]   = Proyek::where('status_proyek',0)->get()->count();
+        $total['grafik'][1]   = Proyek::where('status_proyek',1)->get()->count();
+        $total['total']       = Proyek::all()->count();
         return json_encode($total);
     }
 }

@@ -11,6 +11,9 @@
                             <small>Jabatan : {{$c->jabatan->nama_jabatan}}</small><br/>	
                         </td>
                         <td>
+                            @if($c->foto)
+                            <img src="{{asset('storage/'.$c->foto)}}" class="img-table">
+                            @endif
                             <button type="button" class="btn btn-primary btn-sm" onclick="tambah_data('{{$c->nama_pegawai}}', '{{$c->id_pegawai}}')">
                                 <i class="fa fa-location-arrow"></i>
                             </button>

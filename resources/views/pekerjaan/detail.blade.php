@@ -27,7 +27,7 @@
                 </div>
             </form>
         </div>
-        <h3>Daftar Detail {{ $pekerjaan->nama_pekerjaan }} </h3>
+        <h3>Detail {{ $pekerjaan->nama_pekerjaan }} </h3>
         <br>
         @include('components.notifikasi')
         {{-- isi konten --}}

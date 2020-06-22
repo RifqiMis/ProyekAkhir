@@ -191,6 +191,7 @@
                     });
                 }else{
                     $('select[name="id_pekerjaan"]').empty();
+                    $('select[name="id_meta"]').empty();
                 }
             });
         });

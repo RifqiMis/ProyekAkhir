@@ -295,13 +295,12 @@ class PresensiController extends Controller
                 ;
             }
 
-
         if($jadwal){
-            return $jadwal;
-
-            $sekarang = date('h:i');
-            $waktu_istirahat = date('h:i',strtotime($jadwal->jam_mulai_istirahat));
-            $waktu_pulang = date('h:i',strtotime($jadwal->jam_pulang));
+            
+            $hari_ini   = date('Y-m-d');
+            $sekarang = date('H:i');
+            $waktu_istirahat = date('H:i',strtotime($jadwal->jam_mulai_istirahat));
+            $waktu_pulang = date('H:i',strtotime($jadwal->jam_pulang));
             
             // mengecek pegawai
             $data = RiwayatPresensi::where('waktu_out',NULL)
@@ -313,13 +312,13 @@ class PresensiController extends Controller
                 
                 // pengecekan waktu sekarang jam istirahan , lalu dicheck out yang masih in dengan jam istirahat
                 if($sekarang == $waktu_istirahat){
-                    $item->waktu_out = date('Y-m-d h:i:s',strtotime($jadwal->jam_mulai_istirahat));
+                    $item->waktu_out = date('Y-m-d H:i:s',strtotime($jadwal->jam_mulai_istirahat));
                     $item->save();
                 }
                 
                 // pengecekan waktu sekarang jam pulang, lalu dicheck out yang masih in dengan jam pulang
                 elseif($sekarang == $waktu_pulang){
-                    $item->waktu_out = date('Y-m-d h:i:s',strtotime($jadwal->jam_pulang));
+                    $item->waktu_out = date('Y-m-d H:i:s',strtotime($jadwal->jam_pulang));
                     $item->save();
                 }
             }

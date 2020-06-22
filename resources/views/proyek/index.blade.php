@@ -6,14 +6,20 @@
 @endsection
 
 @section('content')
+<div id="laporan">
     <div class="container">
-        <div style="margin-bottom:7%">
+        <div style="margin-bottom:5%">
+            <center>
+                <img src="{{asset('storage/lundin.png')}}" class="d-none d-print-block" alt="" style="width: 100px;">
+            </center>
             <h3 class="text-center">Proyek</h3>
+            <button onclick="printDiv('laporan')" class="float-right btn btn-info d-print-none ml-2" title="Cetak Data"><i class="fa fa-print"></i></button>
             @if (Auth::user()->role=='admin')
-            <a href="{{url("proyek/create")}}" class="btn btn-primary  float-right">
+            <a href="{{url("proyek/create")}}" class="btn btn-primary float-right d-print-none">
                 <i class="fas fa-plus"></i> Tambah Data
             </a>
             @endif
+            <div class="d-none d-print-block text-right font-italic">Tanggal Cetak : {{Helper::tanggal_idn(now())}}</div>
         </div>
 
         @include('components.notifikasi')
@@ -21,8 +27,8 @@
         {{-- isi konten --}}
         <div class="container">
             <form action="{{ url('proyek') }}" method="GET">
-                <div class="row">
-                    <div class="col-4">
+                <div class="row d-print-none">
+                    <div class="col-2">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                               <label class="input-group-text" for="inputGroupSelect01">Status</label>
@@ -34,7 +40,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-3">
                         <div class="form-group">
                         <input type="text" name="cari" class="form-control" placeholder="Cari Proyek" value="@if (!empty($input->cari)){{$input->cari}}@endif">
                         </div>
@@ -47,18 +53,20 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
+                    <th scope="col">Tanggal Mulai</th>
                     <th scope="col">Kode Kapal</th>
                     <th scope="col">Desain Kapal</th>
                     <th scope="col">Proyek</th>
                     <th scope="col">Status</th>
                     @if (Auth::user()->role=='admin')
-                        <th scope="col">Pilihan</th>
+                        <th scope="col" class="d-print-none">Pilihan</th>
                     @endif
                 </tr>
                 </thead>
                 <tbody>
                     @foreach($proyeks as $iteration => $proyek)
                     <tr>
+                        <td>{{Helper::tanggal_idn($proyek->created_at)}}</td>
                         <td>{{$proyek->id_proyek}}</td>
                         <td>
                             @if($proyek->foto)
@@ -78,7 +86,7 @@
                             @endif
                         </td>
                     @if (Auth::user()->role=='admin')
-                        <td>
+                        <td class="d-print-none">
                             <form action="{{url("proyek/{$proyek->id_proyek}")}}" method="post">
                                 <a href="{{url("proyek/{$proyek->id_proyek}")}}" class="btn btn-outline-primary btn-sm" title="Daftar Pekerjaan">
                                     <i class="fas fa-info-circle"></i>
@@ -98,8 +106,12 @@
                     @endforeach
                 </tbody>
             </table>
-            {{ $proyeks->links() }}
+            <div class="d-print-none">
+                {{ $proyeks->links() }}
+            </div>
         </div>
     </div>
+</div>
+    
 @endsection
 

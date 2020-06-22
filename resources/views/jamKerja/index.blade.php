@@ -6,13 +6,17 @@
 @endsection
 
 @section('content')
+<div id="laporan">
     <div class="container">
         <div style="margin-bottom:7%">
-            <h3 class="text-center">Jadwal Kerja</h3>
-            <a href="{{route("jam-kerja.create")}}" class="btn btn-primary  float-right">
+            <h3 class="text-center">Pengaturan Jam Kerja</h3>
+            <button onclick="printDiv('laporan')" class="float-right btn btn-info d-print-none ml-2" title="Cetak Data"><i class="fa fa-print"></i></button>
+            <a href="{{route("jam-kerja.create")}}" class="btn btn-primary float-right d-print-none">
                 <i class="fas fa-plus"></i> Tambah Data
             </a>
         </div>
+        <div class="d-none d-print-block text-right font-italic">Tanggal Cetak : {{Helper::tanggal_idn(now())}}</div>
+        <br>
         @include('components.notifikasi')
 
         {{-- isi konten --}}
@@ -57,8 +61,11 @@
                     @endforeach
                 </tbody>
             </table>
-            {{ $jamkerjas->links() }}
+            <div class="row d-print-none">
+                {{ $jamkerjas->links() }}
+            </div>
         </div>
     </div>
+</div>
 @endsection
 

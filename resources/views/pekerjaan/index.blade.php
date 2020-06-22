@@ -8,7 +8,7 @@
 @section('content')
     <div class="container">
         <div style="margin-bottom:7%">
-            <h3 class="text-center">Pekerjaan</h3>
+            <h3 class="text-center">Master Pekerjaan</h3>
             <a href="{{url("pekerjaan/create")}}" class="btn btn-primary  float-right">
                 <i class="fas fa-plus"></i> Tambah Data
             </a>

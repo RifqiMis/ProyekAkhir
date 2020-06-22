@@ -7,10 +7,14 @@
 
 @section('content')
 
+<div id="laporan">
     <div class="container">
         <div style="margin-bottom:7%">
+            <center>
+                <img src="{{asset('storage/lundin.png')}}" class="d-none d-print-block" alt="" style="width: 100px;">
+            </center>
             <h3 class="text-center">Pegawai</h3>
-            <a href="{{url("pegawai/create")}}" class="btn btn-primary  float-right">
+            <a href="{{url("pegawai/create")}}" class="btn btn-primary float-right d-print-none ">
                 <i class="fas fa-plus"></i> Tambah Data
             </a>
         </div>
@@ -20,7 +24,7 @@
         {{-- isi konten --}}
         <div class="container">
             <form action="{{ url('pegawai') }}" method="GET">
-                <div class="row">
+                <div class="row d-print-none">
                     <div class="col-3">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
@@ -54,9 +58,11 @@
                     </div>
                     <div class="col-2">
                         <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+                        <button onclick="printDiv('laporan')" class="float-right btn btn-info d-print-none ml-2" title="Cetak Data"><i class="fa fa-print"></i></button>
                     </div>                    
                 </div>
             </form>
+            <div class="d-none d-print-block text-right font-italic">Tanggal Cetak : {{Helper::tanggal_idn(now())}}</div>
             <br>
             <table class="table table-hover">
                 <thead>
@@ -67,7 +73,7 @@
                     <th scope="col">Jabatan</th>
                     <th scope="col">Kelompok Kerja</th>
                     <th scope="col">Foto</th>
-                    <th scope="col">Pilihan</th>
+                    <th scope="col" class="d-print-none">Pilihan</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -87,7 +93,7 @@
                             <img src="{{asset('storage/'.$pegawai->foto)}}" class="img-table">
                             @endif
                         </td>
-                        <td>
+                        <td class="d-print-none">
                             <form action="{{url("pegawai/{$pegawai->id_pegawai}")}}" method="post">
                                 <a href="#" value="{{ action('PegawaiController@show',$pegawai->id_pegawai) }}" class="btn btn-sm btn-outline-info modalMd" data-toggle="modal" data-target="#modalMd" title="Kartu Pegawai"><i class="fas fa-print"></i></a>
                                 {{-- <a href="{{url("pegawai/{$pegawai->id_pegawai}")}}" class="btn btn-outline-info btn-sm" title="Lihat QR Code Pegawai">
@@ -107,9 +113,11 @@
                     @endforeach
                 </tbody>
             </table>
-            {{ $pegawais->links() }}
+            <div class="row d-print-none">
+                {{ $pegawais->links() }}
+            </div>
         </div>
     </div>
-
+</div>
 @endsection
 

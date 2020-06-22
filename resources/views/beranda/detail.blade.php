@@ -28,8 +28,9 @@
                 <h4 class="input text-center mb-0 mt-2">Rekapitulasi Waktu Pengerjaan Proyek</h4>
                 <button onclick="printDiv('laporan')" class="float-right btn btn-info d-print-none" title="Cetak Data"><i class="fa fa-print" style="@media print{ display:none;}"></i></button>
                 <h3  class="text-center mb-3">{{ $proyek->deskripsi_proyek}}</h3>
+                <div class="d-none d-print-block text-right">Tanggal Cetak : {{Helper::tanggal_idn(now())}}</div>
                 <p class="mb-0"> Kode Proyek : {{ $proyek->id_proyek}}</p>
-                <p class="mb-0"> Tanggal Input Proyek : {{ date('d/m/Y',strtotime($proyek->created_at)) }}</p>
+                <p class="mb-0"> Tanggal Mulai Proyek : {{ Helper::tanggal_idn($proyek->created_at) }}</p>
                 <p class="mb-0"> Status Proyek : 
                     @if ($proyek->status_proyek=='1')
                         {{ 'Pengerjaan' }}

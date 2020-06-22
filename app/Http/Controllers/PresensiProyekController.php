@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Proyek;
 use App\Pekerjaan;
 use App\PekerjaanMeta;
+use App\KelompokPegawai;
 
 class PresensiProyekController extends Controller
 {
@@ -16,8 +17,20 @@ class PresensiProyekController extends Controller
      */
     public function index()
     {
+        $kelompok = KelompokPegawai::all();
+        $proyek = Proyek::all();
+        return view('presensi.laporan',compact(['kelompok','proyek']));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function ongoing()
+    {
         $ongoing = RiwayatPresensi::where('waktu_out',NULL)->get();
-        return view('presensi.laporan',compact(['ongoing']));
+        return view('presensi.ongoing',compact(['ongoing']));
     }
 
     /**
@@ -126,6 +139,45 @@ class PresensiProyekController extends Controller
             $data->whereDate('waktu_in',$request->tanggal);
         }
         $data = $data->get();
+
+        return view('presensi.tabel',compact('data'))->renderSections()['content'];
+
+    }
+
+    public function laporanPegawai(Request $request)
+    {
+
+        $data = RiwayatPresensi::where('waktu_out','!=',NULL)
+        ->join('pegawai', 'pegawai.id_pegawai', '=', 'riwayat_presensi.id_pegawai')
+        ->orderBy('pegawai.nama_pegawai','ASC');
+        if($request->has('tanggal')){
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $data->whereDate('waktu_in',$request->tanggal)
+            ->Where('pegawai.nama_pegawai', 'like', '%'.$query.'%');
+        }
+
+        if($request->kelompok != 0){
+            $data = $data->where('pegawai.id_kelompok',$request->kelompok);
+        }
+
+        if($request->proyek != 0){
+            $data = $data->where('id_proyek',$request->proyek);
+        }
+
+        if($request->pekerjaan != 0){
+            $data = $data->where('id_pekerjaan',$request->pekerjaan);
+        }
+
+        if($request->meta != 0){
+            $data = $data->where('id_meta',$request->meta);
+        }
+
+        if($request->num != NULL){
+            $data = $data->paginate($request->num);
+        }elseif($request->num == NULL) {
+            $data = $data->get();
+        }
 
         return view('presensi.tabel',compact('data'))->renderSections()['content'];
 

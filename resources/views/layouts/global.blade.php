@@ -89,12 +89,24 @@
                                 </li>
                                 <li class="nav-item {{ Request::segment(1) === 'jam-kerja' ? 'active' : null }}">
                                     <a class="nav-link" href="{{ url('/jam-kerja') }}">
-                                        Jadwal Kerja
+                                        Jam Kerja
                                     </a>
                                 </li>
                             @endif
                             @if (Auth::user()->role==='manajer'||Auth::user()->role==='admin')
-                                <li class="nav-item"><a class="nav-link {{ Request::segment(1) === 'presensi-proyek' ? 'active' : null }}" href="{{ url('/presensi-proyek') }}">Presensi Proyek</a></li>
+                                <li class="nav-item dropdown {{ Request::segment(1) === 'presensi-proyek' ? 'active' : null }}">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        Presensi Proyek <span class="caret"></span>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" class="logout" href="{{url('/presensi-proyek')  }}">
+                                            Laporan Harian Presensi
+                                        </a>
+                                        <a class="dropdown-item" class="logout" href="{{url('/presensi-proyek-ongoing')  }}">
+                                            Presensi yang berjalan
+                                        </a>
+                                    </div>
+                                </li>
                             @endif
                         @endguest
                     </ul>

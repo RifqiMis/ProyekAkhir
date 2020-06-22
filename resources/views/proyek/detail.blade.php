@@ -12,6 +12,7 @@
                 <a href="{{route('proyek.index')}}" class="btn btn-sm btn-danger mb-2">kembali</a>
             </div>
             <hr>
+            {{-- @if ($proyek->status == ) --}}
             <form action="{{route('riwayat-pekerjaan.store')}}" method="POST">
                 @csrf
                 <div class="form-group row">
@@ -35,9 +36,11 @@
                     </div>
                 </div>
             </form>
+            {{-- @endif --}}
+            
         </div>
         <br>
-        <h3>Daftar Pekerjaan {{ $proyek->deskripsi_proyek }} </h3>
+        <h4>Nama Pekerjaan {{ $proyek->deskripsi_proyek }} </h4>
         <br>
         @include('components.notifikasi')
         {{-- isi konten --}}

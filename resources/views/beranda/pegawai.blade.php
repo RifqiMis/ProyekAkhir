@@ -30,8 +30,9 @@
                 <h4 class="input text-center mb-0 mt-2">Detail Presensi</h4>
                 <button onclick="printDiv('laporan')" class="float-right btn btn-info d-print-none" title="Cetak Data"><i class="fa fa-print" style="@media print{ display:none;}"></i></button>
                 <h4  class="text-center mb-3">{{ $proyek->deskripsi_proyek}} {{ $kerja->nama_pekerjaan }} {{ $meta->nama_meta}}</h4>
+                <div class="d-none d-print-block text-right">Tanggal Cetak : {{Helper::tanggal_idn(now())}}</div>
                 <p class="mb-0"> Kode Pekerjaan : {{ $proyek->id_proyek.'-'.$kerja->id_pekerjaan.'-'.$meta->id_meta}}</p>
-                <p class="mb-0"> Tanggal Input Proyek : {{ date('d/m/Y',strtotime($proyek->created_at)) }}</p>
+                <p class="mb-0"> Tanggal Mulai Proyek : {{ Helper::tanggal_idn($proyek->created_at) }}</p>
                 <p class="mb-0"> Status Proyek : 
                     @if ($proyek->status_proyek=='1')
                         {{ 'Pengerjaan' }}
@@ -76,7 +77,7 @@
                             <td>{{$v->pegawai->nama_pegawai}}</td>
                             <td>{{$v->nama_jabatan}}</td>
                             <td>{{$v->nama_kelompok_pegawai}} </td>
-                            <td>{{Carbon::parse($v->waktu_in)->format('d-m-Y') }} </td>
+                            <td>{{Helper::tanggal_idn($v->waktu_in) }} </td>
                             <td>{{Carbon::parse($v->waktu_in)->format('H:i:s') }} - {{Carbon::parse($v->waktu_out)->format('H:i:s') }}</td>
                             <td> 
                                 {{Helper::humanJam(Helper::time2Diff($v->waktu_in,$v->waktu_out))}}

@@ -10,9 +10,13 @@
     <div class="row">
         <div class="col-8">
             <div class="bg-white shadow-sm">
-                <br>
+                {{-- <br>
                 <div class="container">
                    <canvas id="myChart"></canvas>
+                </div>
+                <br> --}}
+                <div class="container pt-3 pb-2">
+                    <canvas id="myChartPie"></canvas>
                 </div>
                 <br>
             </div>
@@ -30,18 +34,18 @@
                 <div class="container text-center" style="position: relative;">
                     <h3>Departemen Produksi</h3>
                     <div class="row" style="margin-top: 15px">
-                        <div class="col-4">
+                        <div class="col-6">
                             <a href=""><h2 style="margin-bottom: 0px">{{ $departemen['supervisor'] }}</h2></a>
                             <p>Supervisor</p>
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
                             <a href=""><h2 style="margin-bottom: 0px">{{ $departemen['kelompok'] }}</h2></a>
                             <p>Kelompok</p>
                         </div>
-                        <div class="col-4">
+                        {{-- <div class="col-4">
                             <a href=""><h2 style="margin-bottom: 0px">{{ $departemen['pegawai'] }}</h2></a>
                             <p>Pekerja</p>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <br>
@@ -88,6 +92,7 @@
                         </div> 
                     </div>
                 </form>
+                <div class="d-none d-print-block text-right font-italic">Tanggal Cetak : {{Helper::tanggal_idn(now())}}</div>
                 <br>
                 <table class="table table-hover">
                     <thead>
@@ -153,12 +158,13 @@
                     <center>
                         <img src="{{asset('storage/lundin.png')}}" class="d-none d-print-block" alt="" style="width: 100px;">
                     </center>
-                    <h4 class="input text-center mb-0 mt-2">Daftar Pegawai Absen Pekerjaan</h4>
+                    <h4 class="input text-center mb-0 mt-2">Daftar Pegawai yang Tidak Hadir Pekerjaan</h4>
                     <h3  class="text-center">Departemen Produksi</h3>
                 </div>
                 <br>
                 {{-- isi terlambat --}}
                 <div class="container">
+                    <div class="d-none d-print-block text-right font-italic">Tanggal Cetak : {{Helper::tanggal_idn(now())}}</div>
                     <form action="{{ url('home') }}" method="get">
                         <div class="row">
                             <div class="col-4">
@@ -206,6 +212,7 @@
                     <h4 class="input text-center mb-0 mt-2">Keterlambatan Presensi Proyek</h4>
                     <h3  class="text-center">Departemen Produksi</h3>
                 </div>
+                <div class="d-none d-print-block text-right font-italic">Tanggal Cetak : {{Helper::tanggal_idn(now())}}</div>
                 <br>
                 {{-- isi terlambat --}}
                 <div class="container">
@@ -261,7 +268,7 @@
                 var myChart = new Chart(ctx, {
                     type: 'bar',
                     data: {
-                        labels: ['Absen','Terlambat', 'Berlangsung', 'Selesai',],
+                        labels: ['Tidak Hadir','Terlambat', 'Berlangsung', 'Selesai',],
                         datasets: [{
                             label: 'Presensi Proyek Kapal pada '+today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear(),
                             data: data,
@@ -297,6 +304,46 @@
             }
         });
 
+    // Chart pie
+        $.ajax({
+            url:  '{{ url('akumulasi') }}' + '-pegawai',
+            type: "GET",
+            dataType: "json",
+            success:function(data) {
+                var today = new Date();
+                var ctx = document.getElementById('myChartPie').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Tidak Hadir', 'Hadir',],
+                        datasets: [{
+                            label: 'Presensi Proyek Kapal pada '+today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear(),
+                            data: data.presensi,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        title: {
+                            display: true,
+                            text: 'Total Pegawai : ' + data.total
+                        }
+                    }
+                });
+            }
+        });
 
         //doughnut
         $.ajax({
@@ -310,7 +357,7 @@
                     data: {
                         labels: ["Proyek Selesai", "Proyek Dikerjakan"],
                         datasets: [{
-                            data: data,
+                            data: data.grafik,
                             // data: total,
                             backgroundColor: ["rgba(75, 192, 192, 1)","rgba(150, 150, 150, 1)"],
                             hoverBackgroundColor: ["rgba(75, 192, 192, 0.5)","rgba(150, 150, 150, 0.5)"]
@@ -318,6 +365,10 @@
                         },
                         options: {
                             responsive: true,
+                            title: {
+                                display: true,
+                                text: 'Total Proyek : ' + data.total
+                            }
                         }
                 });
             }

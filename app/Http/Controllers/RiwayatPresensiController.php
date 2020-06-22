@@ -91,4 +91,37 @@ class RiwayatPresensiController extends Controller
         return json_encode($data);
 
     }
+
+    public function akumulasiPegawai(Request $request)
+    {
+        $waktu = Carbon::now();
+        $data['total'] = Pegawai::all()->count();
+
+        $pegawai = RiwayatPresensi::select('id_pegawai')
+            ->whereDate('waktu_in',$waktu)
+            ->groupBy('id_pegawai')
+            ->get();
+
+        if(count($pegawai)==0){
+            $data['presensi'][0] = Pegawai::all()->count();
+            $data['presensi'][1] = 0;
+            return $data;
+        }else{
+            foreach ($pegawai as $key => $value) {
+                $id_pegawai[$key] = $value->id_pegawai;
+            }
+            $data['presensi'][0] = Pegawai::whereNotIn('id_pegawai',$id_pegawai)
+                ->get()
+                ->count();
+            $data['presensi'][1] = $data['total'] - $data['presensi'][0];
+        }
+
+        // data terlambat
+        // $data['presensi'][1] = RiwayatPresensi::where('telat','!=',0)
+        //     ->whereDate('waktu_in',$waktu)
+        //     ->get()
+        //     ->count();
+        return json_encode($data);
+
+    }
 }

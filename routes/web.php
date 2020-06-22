@@ -34,6 +34,7 @@ Route::group(['middleware'=>['auth','checkRole:admin,manajer,hrd']],function(){
     Route::get('proyek-total', 'ProyekController@total')->name('proyek-total');
     Route::any('pegawai-terlambat', 'RiwayatPresensiController@terlambat')->name('pegawai-terlambat');
     Route::get('akumulasi-presensi', 'RiwayatPresensiController@akumulasi')->name('akumulasi-presensi');
+    Route::get('akumulasi-pegawai', 'RiwayatPresensiController@akumulasiPegawai')->name('akumulasi-pegawai');
 
 });
 
@@ -47,10 +48,12 @@ Route::group(['middleware'=>['auth','checkRole:admin,manajer']],function(){
     Route::resource('proyek', 'ProyekController');
     Route::resource('presensi-proyek', 'PresensiProyekController');
     Route::any('presensi-proyek/laporan', 'PresensiProyekController@laporan');
+    Route::get('presensi-proyek-ongoing', 'PresensiProyekController@ongoing')->name('presensi-proyek-ongoing');
     Route::resource('riwayat-pekerjaan', 'RiwayatPekerjaanController');
 
     // Ajax
     Route::any('laporan-harian', 'PresensiProyekController@laporan')->name('laporan-harian');
+    Route::any('laporan-harian-pegawai', 'PresensiProyekController@laporanPegawai')->name('laporan-harian-pegawai');
     Route::any('pegawai-absen', 'RiwayatPresensiController@absen')->name('pegawai-absen');
     Route::get('riwayat-pegawai', 'BerandaController@pegawai')->name('riwayat-pegawai');
     Route::any('pegawai-cari', 'PegawaiController@cari');

@@ -40,7 +40,7 @@ class BerandaController extends Controller
         
         $proyek = $proyek->paginate(10);
 
-        return view('beranda.index', ['proyeks' => $proyek,'input' => $request, 'departemen' => $departemen ]);
+        return view('beranda.index', ['proyeks' => $proyek->appends(['status' => $request->status,'cari' => $request->cari]),'input' => $request, 'departemen' => $departemen ]);
     }
 
      /**
