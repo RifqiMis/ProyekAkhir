@@ -27,9 +27,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                    @foreach($pekerjaans as $iteration => $pekerjaan)
+                    @foreach($pekerjaans as $it => $pekerjaan)
                     <tr>
-                        <td>{{$iteration+1}}</td>
+                        <td>{{$pekerjaans->firstItem() + $it}}</td>
                         <td>{{$pekerjaan->nama_pekerjaan}} </td>
                         <td>
                             <form action="{{url("pekerjaan/{$pekerjaan->id_pekerjaan}")}}" method="post">

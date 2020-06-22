@@ -77,9 +77,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                    @foreach($pegawais as $iteration => $pegawai)
+                    @foreach($pegawais as $it => $pegawai)
                     <tr>
-                        <td>{{$iteration+1}}</td>
+                        <td>{{$pegawais->firstItem() + $it}}</td>
                         <td>{{$pegawai->ssn}} </td>
                         <td>{{$pegawai->nama_pegawai}} </td>
                         <td> 

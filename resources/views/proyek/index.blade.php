@@ -40,6 +40,15 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-5">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Tanggal </span>
+                            </div>
+                                <input type="date" name="tanggal_mulai" id="tanggal" class="form-control" aria-describedby="basic-addon1" value="@if (!empty($input->tanggal_mulai)){{$input->tanggal_mulai}}@endif">
+                                <input type="date" name="tanggal_akhir" id="tanggal" class="form-control" aria-describedby="basic-addon1" value="@if (!empty($input->tanggal_akhir)){{$input->tanggal_akhir}}@endif">
+                            </div>
+                    </div>
                     <div class="col-3">
                         <div class="form-group">
                         <input type="text" name="cari" class="form-control" placeholder="Cari Proyek" value="@if (!empty($input->cari)){{$input->cari}}@endif">

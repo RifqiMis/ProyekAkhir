@@ -55,6 +55,20 @@ class RiwayatPresensiController extends Controller
 
     }
 
+    public function pengerjaanHariIni(Request $request)
+    {
+
+        $data = RiwayatPresensi::whereDate('waktu_in',Date('Y-m-d'))
+            ->groupBy('id_proyek','id_pekerjaan','id_meta')
+            ->paginate(10);
+
+        if(count($data)>0)
+            return view('beranda.tabel',compact('data'))->renderSections()['content'];
+        else
+            return view('beranda.tabel',compact('data'))->renderSections()['none'];
+
+    }
+
     public function akumulasi(Request $request)
     {
         $waktu = Carbon::now();

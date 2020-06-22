@@ -92,4 +92,45 @@ class BerandaController extends Controller
 
         return view('beranda.pegawai', compact(['proyek','pekerjaan','meta','kerja']));
     }
+
+    public function pengerjaanHariIni(Request $request)
+    {
+        $pekerjaan = '';
+        $pekerjaanMeta = '';
+        $proyek     = Proyek::where('id_proyek',$request->id_proyek)->first();
+        $details    = RiwayatPresensi::whereDate('waktu_in',Date('Y-m-d'))
+            ->where('id_proyek',$request->id_proyek);
+        
+        if(!empty($request->id_pekerjaan)){
+            $details    = $details->where('id_pekerjaan',$request->id_pekerjaan);
+            $pekerjaan  = Pekerjaan::where('id_pekerjaan',$request->id_pekerjaan)->first();
+        }
+            
+        if(!empty($request->id_meta)){
+            $details    = $details->where('id_meta',$request->id_meta);
+            $pekerjaanMeta = PekerjaanMeta::where('id_meta',$request->id_meta)->first();
+        }
+
+        if($request->status==1){
+            $details    = $details->where('waktu_out',NULL);
+        }elseif($request->status==0){
+            $details    = $details->where('waktu_out','!=',NULL);
+        }
+
+        if(!empty($request->paginate_number))
+            $details    = $details->paginate($request->paginate_number);
+        else
+            $details    = $details->paginate(10);
+
+        $details    = $details->appends([
+            'status' => $request->status,
+            'id_pekerjaan' => $request->id_pekerjaan,
+            'id_proyek' => $request->id_proyek,
+            'id_meta' => $request->id_meta,
+        ]);
+        $input      = $request;
+
+        return view('beranda.detailHariIni',compact('details','input','proyek','pekerjaan','pekerjaanMeta'));
+
+    }
 }

@@ -15,8 +15,22 @@
                    <canvas id="myChart"></canvas>
                 </div>
                 <br> --}}
-                <div class="container pt-3 pb-2">
-                    <canvas id="myChartPie"></canvas>
+                <br>
+                <div class="container overflow-auto" style="height: 370px">
+                    <h3 class="text-center mb-5">Pengerjaan Proyek Kapal Hari ini</h3>
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Kode Proyek</th>
+                            <th scope="col">Nama Proyek</th>
+                            <th scope="col">Pekerjaan</th>
+                        </tr>
+                        </thead>
+                        <tbody id="proyek_hari">
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
                 </div>
                 <br>
             </div>
@@ -30,7 +44,10 @@
                 <br>
             </div>
             <div class="bg-white shadow-sm" style="margin-top: 25px">
-                <br>
+                <div class="container pt-3 pb-2">
+                    <canvas id="myChartPie"></canvas>
+                </div>
+                {{-- <br>
                 <div class="container text-center" style="position: relative;">
                     <h3>Departemen Produksi</h3>
                     <div class="row" style="margin-top: 15px">
@@ -42,13 +59,13 @@
                             <a href=""><h2 style="margin-bottom: 0px">{{ $departemen['kelompok'] }}</h2></a>
                             <p>Kelompok</p>
                         </div>
-                        {{-- <div class="col-4">
+                        <div class="col-4">
                             <a href=""><h2 style="margin-bottom: 0px">{{ $departemen['pegawai'] }}</h2></a>
                             <p>Pekerja</p>
-                        </div> --}}
+                        </div>
                     </div>
                 </div>
-                <br>
+                <br> --}}
             </div>
         </div>
     </div>
@@ -105,9 +122,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                        @foreach($proyeks as $iteration => $proyek)
+                        @foreach($proyeks as $it => $proyek)
                         <tr>
-                            <td>{{$iteration+1}}</td>
+                            <td>{{$proyeks->firstItem() + $it}}</td>
                             <td>{{$proyek->id_proyek}} </td>
                             <td><a href="{{url("home/{$proyek->id_proyek}")}}">{{$proyek->deskripsi_proyek}}</a> </td>
                             <td>
@@ -257,52 +274,35 @@
 
     $(document).ready(function() {
 
-        // Chart Tinggi
-        $.ajax({
-            url:  '{{ url('akumulasi') }}' + '-presensi',
-            type: "GET",
-            dataType: "json",
-            success:function(data) {
-                var today = new Date();
-                var ctx = document.getElementById('myChart').getContext('2d');
-                var myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Tidak Hadir','Terlambat', 'Berlangsung', 'Selesai',],
-                        datasets: [{
-                            label: 'Presensi Proyek Kapal pada '+today.getDate()+'-'+(today.getMonth()+1)+'-'+today.getFullYear(),
-                            data: data,
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(75, 192, 192, 1)',
-                            ],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        },
-                        title: {
-                            display: true,
-                            text: 'PT. Lundin'
-                        }
-                    }
-                });
-            }
+        var page = $('#hidden_page').val();
+        pengerjaan_kapal(page);
+
+
+        function pengerjaan_kapal(page)
+        {
+            $.ajax({
+                url:  '{{ url('pengerjaan') }}' + '?page=' +page,
+                success:function(data)
+                {
+                    $('#proyek_hari').html(data);
+                },
+                error: function(){
+                    alert('error!');
+                }
+
+            })
+        }
+
+        $(document).on('click', '.hari-ini .pagination a', function(event){
+            event.preventDefault();
+            var page = $(this).attr('href').split('page=')[1];
+            $('#hidden_page').val(page);
+
+            $('li').removeClass('active');
+                $(this).parent().addClass('active');
+            pengerjaan_kapal(page);
         });
+
 
     // Chart pie
         $.ajax({
@@ -403,7 +403,7 @@
             success:function(result) {
                     $('#telat').html(result);
                 }
-			});
+		});
     }
 
     // Fungsi dapatkan pegawai
@@ -421,6 +421,7 @@
             }
         });
     }
+
  
 </script>
 @endsection

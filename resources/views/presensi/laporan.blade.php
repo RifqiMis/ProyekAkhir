@@ -101,6 +101,7 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
+                        <th scope="col">NO</th>
                         <th scope="col">SSN</th>
                         <th scope="col">Nama Pegawai</th>
                         <th scope="col">Proyek</th>

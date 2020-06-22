@@ -35,6 +35,8 @@ Route::group(['middleware'=>['auth','checkRole:admin,manajer,hrd']],function(){
     Route::any('pegawai-terlambat', 'RiwayatPresensiController@terlambat')->name('pegawai-terlambat');
     Route::get('akumulasi-presensi', 'RiwayatPresensiController@akumulasi')->name('akumulasi-presensi');
     Route::get('akumulasi-pegawai', 'RiwayatPresensiController@akumulasiPegawai')->name('akumulasi-pegawai');
+    Route::get('pengerjaan', 'RiwayatPresensiController@pengerjaanHariIni')->name('pengerjaan');
+    Route::get('beranda/pengerjaan', 'BerandaController@pengerjaanHariIni');
 
 });
 

@@ -32,9 +32,17 @@ class ProyekController extends Controller
         if($request->status != ''){
             $proyek = $proyek->where('status_proyek',$request->status);        
         }
+
+        if($request->tanggal_mulai != ''){
+            $proyek = $proyek->whereDate('created_at','>=',$request->tanggal_mulai);        
+        }
+        if($request->tanggal_akhir != ''){
+            $proyek = $proyek->whereDate('created_at','<=',$request->tanggal_akhir);        
+        }
+
         $proyek = $proyek->orderBy('created_at','desc')
-            ->paginate(10);
-        return view('proyek.index', ['proyeks' => $proyek->appends(['status' => $request->status,'cari' => $request->cari]),'input' => $request]);
+            ->paginate(3);
+        return view('proyek.index', ['proyeks' => $proyek->appends(['status' => $request->status,'cari' => $request->cari,'tanggal_mulai' => $request->tanggal_mulai,'tanggal_akhir' => $request->tanggal_akhir]),'input' => $request]);
     }
 
     /**

@@ -1,8 +1,9 @@
 
 @section('content')
     @if (!empty($data))
-        @foreach ($data as $d)
+        @foreach ($data as $it => $d)
         <tr>
+            <td>{{$data->firstItem() + $it}}</td>
             <td>{{ $d->pegawai->ssn}}</td>
             <td>{{ $d->pegawai->nama_pegawai }}</td>
             <td>{{ $d->proyek->deskripsi_proyek }}</td>
@@ -28,7 +29,7 @@
         </tr>
         @endforeach
         <tr>
-            <td colspan="3">
+            <td colspan="4">
             </td>
             <td colspan="4">
                     {{$data->links()}}
