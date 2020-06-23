@@ -19,7 +19,25 @@ class RiwayatPresensiController extends Controller
         if($request->has('tanggal')){
             $data->whereDate('waktu_in',$request->tanggal);
         }
-        $data = $data->get();
+        if($request->get('kelompok')){
+            $data = $data->where('pegawai.id_kelompok',$request->kelompok);
+        }
+
+        if($request->get('query')){
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $data   = $data->Where('pegawai.nama_pegawai', 'like', '%'.$query.'%');
+        }
+
+        if($request->get('jabatan')){
+            $data = $data->where('pegawai.id_jabatan',$request->jabatan);
+        }
+
+        if($request->num != NULL){
+            $data = $data->paginate($request->num);
+        }elseif($request->num == NULL) {
+            $data = $data->get();
+        }
 
         if(count($data)>0)
             return view('beranda.terlambat',compact('data'))->renderSections()['content'];

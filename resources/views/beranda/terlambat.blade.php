@@ -10,6 +10,15 @@
         <td>{{ Helper::humanJam(Helper::jam_min($d->telat)) }}</td>
     </tr>
     @endforeach
+    <tr>
+        <td colspan="3">
+        </td>
+        <td colspan="3">
+            <div class="terlambat">
+                {{$data->links()}}
+            </div>
+        </td>
+    </tr>
 @endsection
 
 @section('none')

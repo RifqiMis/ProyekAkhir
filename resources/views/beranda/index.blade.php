@@ -176,11 +176,10 @@
                     <center>
                         <img src="{{asset('storage/lundin.png')}}" class="d-none d-print-block" alt="" style="width: 100px;">
                     </center>
-                    <h4 class="input text-center mb-0 mt-2">Daftar Pegawai yang Tidak Hadir</h4>
+                    <h4 class="input text-center mb-0 mt-2">Ketidak Hadiran Pegawai</h4>
                     <h3  class="text-center">Departemen Produksi</h3>
                 </div>
                 <br>
-                {{-- isi terlambat --}}
                 <div class="container">
                     <div class="d-none d-print-block text-right font-italic">Tanggal Cetak : {{Helper::tanggal_idn(now())}}</div>
                     <div class="row mb-2">
@@ -278,18 +277,61 @@
                 <br>
                 {{-- isi terlambat --}}
                 <div class="container">
+                    <div class="row mb-2">
+                        <div class="col-12">
+                            <button onclick="printDiv('laporan')" class="float-right btn btn-info d-print-none" title="Cetak Data"><i class="fa fa-print"></i></button>
+                        </div>
+                    </div>
                     <form action="{{ url('home') }}" method="get">
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-1  d-print-none">
+                                <select class="form-control" name="paginate-number-terlambat" id="paginate-number-terlambat">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="0">All</option>
+                                </select>
+                            </div>
+                            <div class="col-3">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                       <span class="input-group-text" id="basic-addon1">Tanggal </span>
                                     </div>
-                                    <input type="date" name="tanggal" class="form-control" aria-describedby="basic-addon1" value="{{ date('Y-m-d') }}" onchange="handler(tanggal);">
+                                    <input type="date" id="tanggalTerlambat" name="tanggalTerlambat" class="form-control" aria-describedby="basic-addon1" value="{{ date('Y-m-d') }}">
                                   </div>
                             </div>
-                            <div class="col-8">
-                            <button onclick="printDiv('laporan')" class="float-right btn btn-info d-print-none" title="Cetak Data"><i class="fa fa-print" style="@media print{ display:none;}"></i></button>
+                            <div class="col-3">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <label class="input-group-text" for="kelompokT">Kelompok</label>
+                                    </div>
+                                    <select class="custom-select" id="kelompokT" name="kelompokT">
+                                      <option value="0">Semua</option>
+                                      @foreach ($kelompoks as $v)
+                                        <option value="{{$v->id_kelompok_pegawai}}">{{$v->nama_kelompok_pegawai}}</option>
+                                      @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <label class="input-group-text">Jabatan</label>
+                                    </div>
+                                    <select class="custom-select" id="jabatanT" name="jabatanT">
+                                      <option value="">Semua</option>
+                                      @foreach ($jabatans as $key => $val)
+                                        <option value="{{ $val->id_jabatan }}">{{ $val->nama_jabatan }}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-2 d-print-none">
+                                <div class="form-group">
+                                 <input type="text" name="serachT" id="serachT" class="form-control" placeholder="Cari nama pegawai"/>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -308,6 +350,7 @@
                         <tbody id="telat">
                         </tbody>
                     </table>
+                    <input type="hidden" name="hidden_page_terlambat" id="hidden_page_terlambat" value="1" />
                 </div>
     
             </div>
@@ -419,13 +462,6 @@
             }
         });
 
-        // Dapatkan Pegawai yang terlambat diawal load
-        var tanggal = $('input[name="tanggal"').val();
-        if(tanggal != '')
-        {
-            handler(tanggal);
-        }
-
     // Load data tidak hadir
     // Dapatkan tanggal diawal load
         var tanggalAbsen = $('input[name="tanggalAbsen"').val();
@@ -514,24 +550,97 @@
                 $(this).parent().addClass('active');
             fetch_data(page, tanggalAbsen, query, num, kelompok, jabatan);
         });
+
+
+        // Keterlambatan Pegawai 
+        var tanggalAbsen = $('input[name="tanggalTerlambat"').val();
+        var query = $('#serachT').val();
+        var num = $('#paginate-number-terlambat').val();
+        var kelompok = $('#kelompokT').val();
+        var jabatan = $('#jabatanT').val();
+        var page = $('#hidden_page_terlambat').val();
+        fetch_data_terlambat(page, tanggalAbsen, query, num, kelompok, jabatan);
+
+        function fetch_data_terlambat(page, tanggalAbsen, query, num, kelompok, jabatan)
+        {
+            $.ajax({
+                url:"/pegawai-terlambat?page="+page+"&tanggal="+tanggalAbsen+"&query="+query+"&num="+num+"&kelompok="+kelompok+"&jabatan="+jabatan,
+                success:function(data)
+                {
+                    $('#telat').html('');
+                    $('#telat').html(data);
+                }
+            })
+
+        }
+
+        $(document).on('keyup', '#serachT', function(){
+            var tanggalAbsen = $('input[name="tanggalTerlambat"').val();
+            var query = $('#serachT').val();
+            var num = $('#paginate-number-terlambat').val();
+            var kelompok = $('#kelompokT').val();
+            var jabatan = $('#jabatanT').val();
+            var page = $('#hidden_page_terlambat').val();
+            fetch_data_terlambat(page, tanggalAbsen, query, num, kelompok, jabatan);
+        });
+
+        $(document).on('change', '#tanggalTerlambat', function(){
+            var tanggalAbsen = $('input[name="tanggalTerlambat"').val();
+            var query = $('#serachT').val();
+            var num = $('#paginate-number-terlambat').val();
+            var kelompok = $('#kelompokT').val();
+            var jabatan = $('#jabatanT').val();
+            var page = 1;
+            fetch_data_terlambat(page, tanggalAbsen, query, num, kelompok, jabatan);
+        });
+
+        $(document).on('change', '#kelompokT', function(){
+            var tanggalAbsen = $('input[name="tanggalTerlambat"').val();
+            var query = $('#serachT').val();
+            var num = $('#paginate-number-terlambat').val();
+            var kelompok = $('#kelompokT').val();
+            var jabatan = $('#jabatanT').val();
+            var page = $('#hidden_page_terlambat').val();
+            fetch_data_terlambat(page, tanggalAbsen, query, num, kelompok, jabatan);
+        });
+
+        $(document).on('change', '#jabatanT', function(){
+            var tanggalAbsen = $('input[name="tanggalTerlambat"').val();
+            var query = $('#serachT').val();
+            var num = $('#paginate-number-terlambat').val();
+            var kelompok = $('#kelompokT').val();
+            var jabatan = $('#jabatanT').val();
+            var page = $('#hidden_page_terlambat').val();
+            fetch_data_terlambat(page, tanggalAbsen, query, num, kelompok, jabatan);
+        });
+
+        $(document).on('change', '#paginate-number-terlambat', function(){
+            var tanggalAbsen = $('input[name="tanggalTerlambat"').val();
+            var query = $('#serachT').val();
+            var num = $('#paginate-number-terlambat').val();
+            var kelompok = $('#kelompokT').val();
+            var jabatan = $('#jabatanT').val();
+            var page = $('#hidden_page_terlambat').val();
+            fetch_data_terlambat(page, tanggalAbsen, query, num, kelompok, jabatan);
+        });
+        
+        $(document).on('click', '.terlambat .pagination a', function(event){
+            event.preventDefault();
+            var page = $(this).attr('href').split('page=')[1];
+            $('#hidden_page_absen').val(page);
+
+            var tanggalAbsen = $('input[name="tanggalTerlambat"').val();
+            var query = $('#serachT').val();
+            var num = $('#paginate-number-terlambat').val();
+            var kelompok = $('#kelompokT').val();
+            var jabatan = $('#jabatanT').val();
+
+            $('li').removeClass('active');
+                $(this).parent().addClass('active');
+            fetch_data_terlambat(page, tanggalAbsen, query, num, kelompok, jabatan);
+        });
             
     });
-
-    // Fungsi dapatkan pegawai
-    function handler(tanggal){
-
-        // definisi tanggal ketika onchange
-        var tanggal = $('input[name="tanggal"').val();
-        var token = $('meta[name="csrf-token"]').attr('content');
-        $.ajax({
-            url     : '{{ url('pegawai-terlambat') }}',
-            data    : {tanggal:tanggal,_token:token},
-			method		: "POST",
-            success:function(result) {
-                    $('#telat').html(result);
-                }
-		});
-    }
  
 </script>
 @endsection
