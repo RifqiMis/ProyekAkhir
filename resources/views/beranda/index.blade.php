@@ -167,6 +167,7 @@
         <br>
     </div>
 
+    {{-- Pegawai yang tidak hadir --}}
     <div id="laporan-absen">
         <div class="bg-white shadow-sm" style="margin-top: 25px">
             <br>
@@ -175,15 +176,26 @@
                     <center>
                         <img src="{{asset('storage/lundin.png')}}" class="d-none d-print-block" alt="" style="width: 100px;">
                     </center>
-                    <h4 class="input text-center mb-0 mt-2">Daftar Pegawai yang Tidak Hadir Pekerjaan</h4>
+                    <h4 class="input text-center mb-0 mt-2">Daftar Pegawai yang Tidak Hadir</h4>
                     <h3  class="text-center">Departemen Produksi</h3>
                 </div>
                 <br>
                 {{-- isi terlambat --}}
                 <div class="container">
                     <div class="d-none d-print-block text-right font-italic">Tanggal Cetak : {{Helper::tanggal_idn(now())}}</div>
+                    <button onclick="printDiv('laporan-absen')" class="float-right btn btn-info d-print-none" title="Cetak Data"><i class="fa fa-print"></i></button>
                     <form action="{{ url('home') }}" method="get">
                         <div class="row">
+                            <div class="col-1  d-print-none">
+                                <select class="form-control" name="paginate-number" id="paginate-number">
+                                    {{-- <option value="5">5</option> --}}
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="0">All</option>
+                                </select>
+                            </div>
                             <div class="col-4">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
@@ -192,8 +204,36 @@
                                     <input type="date" name="tabsen" class="form-control" aria-describedby="basic-addon1" value="{{ date('Y-m-d') }}" onchange="handlerAbsen(tabsen);">
                                   </div>
                             </div>
-                            <div class="col-8">
-                            <button onclick="printDiv('laporan-absen')" class="float-right btn btn-info d-print-none" title="Cetak Data"><i class="fa fa-print"></i></button>
+                            <div class="col-3">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <label class="input-group-text" for="kelompok">Kelompok</label>
+                                    </div>
+                                    <select class="custom-select" id="kelompok" name="kelompok">
+                                      <option value="0">Semua</option>
+                                      @foreach ($kelompok as $v)
+                                        <option value="{{$v->id_kelompok_pegawai}}">{{$v->nama_kelompok_pegawai}}</option>
+                                      @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <label class="input-group-text" for="inputGroupSelect01">Jabatan</label>
+                                    </div>
+                                    <select class="custom-select" id="inputGroupSelect01" name="id_jabatan">
+                                      <option value="">Semua</option>
+                                      @foreach ($jabatans as $key => $val)
+                                        <option value="{{ $val->id_jabatan }}" {{ $val->id_jabatan == $input->id_jabatan ? 'selected' : '' }}>{{ $val->nama_jabatan }}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-1 d-print-none">
+                                <div class="form-group">
+                                 <input type="text" name="serach" id="serach" class="form-control" placeholder="Cari nama pegawai"/>
+                                </div>
                             </div>
                         </div>
                     </form>

@@ -58,6 +58,71 @@
                         ?>
                     </span>
                 </p>
+
+                <form action="{{ url('riwayat-pegawai') }}" method="GET">
+                    <input type="hidden" name="id_proyek" value="{{$proyek->id_proyek}}">
+                    <input type="hidden" name="id_pekerjaan" value="{{$kerja->id_pekerjaan}}">
+                    <input type="hidden" name="id_meta" value="{{$meta->id_meta}}">
+                    <div class="row mb-0">
+                        <div class="col-3">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" for="inputGroupSelect01">Jabatan</label>
+                                </div>
+                                <select class="custom-select" id="inputGroupSelect01" name="id_jabatan">
+                                  <option value="">Semua</option>
+                                    @foreach ($jabatan as $item)
+                                        <option value="{{$item->id_jabatan}}" @if ($input->id_jabatan == $item->id_jabatan) {{'selected'}} @endif>
+                                            {{$item->nama_jabatan}}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <label class="input-group-text" for="inputGroupSelect01">Kelompok</label>
+                                </div>
+                                <select class="custom-select" id="inputGroupSelect01" name="status">
+                                  <option value="">Semua</option>
+                                  @foreach ($kelompok as $item)
+                                    <option value="{{$item->id_kelompok_pegawai}}" @if ($input->id_kelompok_pegawai == $item->id_kelompok_pegawai) {{'selected'}} @endif>
+                                        {{$item->nama_kelompok_pegawai}}
+                                    </option>
+                                  @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-1  d-print-none">
+                            <select class="form-control" name="paginate_number" id="paginate_number">
+                                <option @if ($input->paginate_number==10){{'selected'}} @endif value="10">10</option>
+                                <option @if ($input->paginate_number==25){{'selected'}} @endif value="25">25</option>
+                                <option @if ($input->paginate_number==50){{'selected'}} @endif value="50">50</option>
+                                <option @if ($input->paginate_number==100){{'selected'}} @endif value="100">100</option>
+                            </select>
+                        </div>
+                        <div class="col-5">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">Tanggal </span>
+                                </div>
+                                    <input type="date" name="tanggal_mulai" id="tanggal" class="form-control" aria-describedby="basic-addon1" value="@if (!empty($input->tanggal_mulai)){{$input->tanggal_mulai}}@endif">
+                                    <input type="date" name="tanggal_akhir" id="tanggal" class="form-control" aria-describedby="basic-addon1" value="@if (!empty($input->tanggal_akhir)){{$input->tanggal_akhir}}@endif">
+                                </div>
+                        </div>
+                        <div class="col-2 d-print-none">
+                            <div class="form-group">
+                            <input type="text" name="cari" class="form-control" placeholder="Cari Proyek" value="@if (!empty($input->cari)){{$input->cari}}@endif">
+                            </div>
+                        </div>
+                        <div class="col-2 d-print-none">
+                            <button class="btn btn-primary" type="submit">Filter</button>
+                        </div>                    
+                    </div>
+                </form>
                 <table class="table table-hover">
                     <thead>
                     <tr>
@@ -73,7 +138,7 @@
                     <tbody>
                         @foreach($pekerjaan as $iteration => $v)
                         <tr>
-                            <td>{{$iteration+1}}</td>
+                            <td>{{$pekerjaan->firstItem() + $iteration}}</td>
                             <td>{{$v->pegawai->nama_pegawai}}</td>
                             <td>{{$v->nama_jabatan}}</td>
                             <td>{{$v->nama_kelompok_pegawai}} </td>
@@ -86,6 +151,7 @@
                         @endforeach
                     </tbody>
                 </table>
+                {{$pekerjaan->links()}}
             </div>
         </div>
         

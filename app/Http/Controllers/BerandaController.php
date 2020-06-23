@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 
 use App\KelompokPegawai;
+use App\Jabatan;
 use App\Pegawai;
 use App\Pekerjaan;
 use App\PekerjaanMeta;
@@ -28,6 +29,8 @@ class BerandaController extends Controller
         $departemen['supervisor']   = Pegawai::where('id_jabatan','1')->get()->count();
         $departemen['kelompok']     = KelompokPegawai::count();
         $departemen['pegawai']      = Pegawai::count();
+        $jabatans                   = Jabatan::all();
+        $kelompoks                  = KelompokPegawai::all();
 
         $proyek     = DB::table('proyek');
         if($request->status != ''){
@@ -76,6 +79,8 @@ class BerandaController extends Controller
      */
     public function pegawai(Request $request)
     {
+        $jabatan    = Jabatan::all();
+        $kelompok   = KelompokPegawai::orderBy('nama_kelompok_pegawai','ASC')->get();
         $proyek     = Proyek::find($request->id_proyek);
         $meta       = PekerjaanMeta::find($request->id_meta);
         $kerja      = Pekerjaan::find($request->id_pekerjaan);
@@ -85,12 +90,54 @@ class BerandaController extends Controller
             ->where('waktu_out','!=',NULL)
             ->join('pegawai', 'pegawai.id_pegawai', '=', 'riwayat_presensi.id_pegawai')
             ->join('jabatan', 'jabatan.id_jabatan', '=', 'pegawai.id_jabatan')
-            ->join('kelompok_pegawai', 'kelompok_pegawai.id_kelompok_pegawai', '=', 'pegawai.id_kelompok')
-            ->get();
+            ->join('kelompok_pegawai', 'kelompok_pegawai.id_kelompok_pegawai', '=', 'pegawai.id_kelompok');
+        
+        if(!empty($request->cari)){
+            $cari = $request->cari;
+            $pekerjaan= $pekerjaan->where(function($q) use ($cari){
+                $q->where('pegawai.nama_pegawai','like',"%$cari%")
+                    ->orWhere('jabatan.nama_jabatan','like',"%$cari%")
+                    ->orWhere('kelompok_pegawai.nama_kelompok_pegawai','like',"%$cari%");
+            });
+        }
 
-        // return $kerja;
+        if($request->tanggal_mulai != ''){
+            $pekerjaan = $pekerjaan->whereDate('riwayat_presensi.created_at','>=',$request->tanggal_mulai);        
+        }
+        if($request->tanggal_akhir != ''){
+            $pekerjaan = $pekerjaan->whereDate('riwayat_presensi.created_at','<=',$request->tanggal_akhir);        
+        }
 
-        return view('beranda.pegawai', compact(['proyek','pekerjaan','meta','kerja']));
+        if(!empty($request->id_jabatan))
+            $pekerjaan    = $pekerjaan->where('pegawai.id_jabatan',$request->id_jabatan);
+        
+        if(!empty($request->id_kelompok))
+            $pekerjaan    = $pekerjaan->where('pegawai.id_kelompok',$request->id_kelompok);
+        
+        if(!empty($request->paginate_number)){
+            if($request->paginate_number==999)
+            $pekerjaan    = $pekerjaan->get();
+            else
+            $pekerjaan    = $pekerjaan->paginate($request->paginate_number);
+        }
+        else
+            $pekerjaan    = $pekerjaan->paginate(10);
+        
+        $pekerjaan    = $pekerjaan->appends([
+            'status'        => $request->status,
+            'id_pekerjaan'  => $request->id_pekerjaan,
+            'id_proyek'     => $request->id_proyek,
+            'id_meta'       => $request->id_meta,
+            'id_jabatan'    => $request->id_jabatan,
+            'id_kelompok'   => $request->id_kelompok,
+            'cari'          => $request->cari,
+            'tanggal_mulai' => $request->tanggal_mulai,
+            'tanggal_akhir' => $request->tanggal_akhir
+        ]);
+
+        $input = $request;
+        
+        return view('beranda.pegawai', compact(['proyek','pekerjaan','meta','kerja','input','jabatan','kelompok']));
     }
 
     public function pengerjaanHariIni(Request $request)

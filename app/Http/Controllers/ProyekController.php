@@ -41,7 +41,7 @@ class ProyekController extends Controller
         }
 
         $proyek = $proyek->orderBy('created_at','desc')
-            ->paginate(3);
+            ->paginate(10);
         return view('proyek.index', ['proyeks' => $proyek->appends(['status' => $request->status,'cari' => $request->cari,'tanggal_mulai' => $request->tanggal_mulai,'tanggal_akhir' => $request->tanggal_akhir]),'input' => $request]);
     }
 

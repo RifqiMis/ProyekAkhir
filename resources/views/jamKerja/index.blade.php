@@ -31,9 +31,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                    @foreach($jamkerjas as $iteration => $jamkerja)
+                    @foreach($jamkerjas as $key => $jamkerja)
                     <tr>
-                        <td>{{$jamkerjas->firstItem() + $it}}</td>
+                        <td> {{$jamkerjas->firstItem() + $key }}</td>
                         <td>
                             @if ($jamkerja->default == 'y')
                                 <div class="badge badge-success">

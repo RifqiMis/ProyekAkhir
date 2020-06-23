@@ -47,7 +47,7 @@
                             <div class="form-group">
                              <input type="text" name="serach" id="serach" class="form-control" placeholder="Cari nama pegawai"/>
                             </div>
-                           </div>
+                        </div>
                         <div class="col-6">
                             <button onclick="printDiv('laporan')" class="float-right btn btn-info d-print-none ml-2" title="Cetak Data"><i class="fa fa-print"></i></button>
                             @if (Auth::user()->role=='admin')
@@ -151,12 +151,6 @@
     //             }
 	// 		});
         
-    //     if(tanggal != $('input[name="hari_ini"').val()){
-    //         $('#tambah_data').addClass('d-none');
-    //     }
-    //     if(tanggal == $('input[name="hari_ini"').val()){
-    //         $('#tambah_data').removeClass('d-none');
-    //     }
     // }
 
 
@@ -183,6 +177,13 @@
                     $('#hasil-data').html(data);
                 }
             })
+
+            if(tanggal != $('input[name="hari_ini"').val()){
+                $('#tambah_data').addClass('d-none');
+            }
+            if(tanggal == $('input[name="hari_ini"').val()){
+                $('#tambah_data').removeClass('d-none');
+            }
         }
 
         $(document).on('keyup', '#serach', function(){
