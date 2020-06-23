@@ -147,7 +147,6 @@ class PresensiController extends Controller
                                 ->first();
                 // jika terdapat data
                 if($cek_presensi){
-                    return $cek_presensi;
                     // Pengecekan belum di checkout
                     $cek_pekerjaan = RiwayatPresensi::where('id_pegawai',$data->id_pegawai)
                         ->whereDate('waktu_in',$hari_ini)
@@ -186,7 +185,6 @@ class PresensiController extends Controller
 
                 // tentukan data hari itu kosong , kalau kosong isi waktu in jam masuk
                 }elseif(empty($cek_presensi)){
-                    return 'anda terlamba!';
                     // ini untuk yang telat
                     if(Helper::time_to_int($waktu) > (Helper::time_to_int($jadwal->jam_masuk) + Helper::time_to_int($jadwal->toleransi)) ){
                         $telat = Helper::time2Diff($jadwal->jam_masuk,Carbon::now());
