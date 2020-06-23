@@ -34,7 +34,7 @@ class RiwayatPresensiController extends Controller
         $data;
 
         $pegawai = RiwayatPresensi::select('id_pegawai')
-            ->whereDate('waktu_in',$request->tanggal)
+            ->whereDate('waktu_in',$request->tanggalAbsen)
             ->groupBy('id_pegawai')
             ->get();
 
@@ -45,8 +45,27 @@ class RiwayatPresensiController extends Controller
             $id_pegawai[$key] = $value->id_pegawai;
         }
 
-        $data = Pegawai::whereNotIn('id_pegawai',$id_pegawai)
-            ->get();
+        $data = Pegawai::whereNotIn('id_pegawai',$id_pegawai);
+
+        if($request->get('kelompok')){
+            $data = $data->where('pegawai.id_kelompok',$request->kelompok);
+        }
+
+        if($request->get('query')){
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $data   = $data->Where('pegawai.nama_pegawai', 'like', '%'.$query.'%');
+        }
+
+        if($request->get('jabatan')){
+            $data = $data->where('pegawai.id_jabatan',$request->jabatan);
+        }
+
+        if($request->num != NULL){
+            $data = $data->paginate($request->num);
+        }elseif($request->num == NULL) {
+            $data = $data->get();
+        }
 
         if(count($data)>0)
             return view('beranda.absen',compact('data'))->renderSections()['content'];
@@ -60,7 +79,7 @@ class RiwayatPresensiController extends Controller
 
         $data = RiwayatPresensi::whereDate('waktu_in',Date('Y-m-d'))
             ->groupBy('id_proyek','id_pekerjaan','id_meta')
-            ->paginate(10);
+            ->paginate(4);
 
         if(count($data)>0)
             return view('beranda.tabel',compact('data'))->renderSections()['content'];

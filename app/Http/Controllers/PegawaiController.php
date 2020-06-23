@@ -43,7 +43,12 @@ class PegawaiController extends Controller
             $pegawai = $pegawai->where('id_jabatan',$request->id_jabatan);    
         }
         $pegawai = $pegawai->paginate(10);
-        return view('pegawai.index', ['pegawais' => $pegawai->appends(['id_kelompok' => $request->id_kelompok,'id_jabatan' => $request->id_jabatan,'cari' => $request->cari]),'input' => $request,'jabatans' => $jabatans,'kelompoks' => $kelompoks]);
+        return view('pegawai.index', 
+            ['pegawais' => $pegawai->appends(['id_kelompok' => $request->id_kelompok,'id_jabatan' => $request->id_jabatan,'cari' => $request->cari]),
+            'input' => $request,
+            'jabatans' => $jabatans,
+            'kelompoks' => $kelompoks
+        ]);
     }
 
     /**

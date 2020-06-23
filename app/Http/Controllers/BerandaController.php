@@ -32,7 +32,7 @@ class BerandaController extends Controller
         $jabatans                   = Jabatan::all();
         $kelompoks                  = KelompokPegawai::all();
 
-        $proyek     = DB::table('proyek');
+        $proyek     = DB::table('proyek')->orderBy('created_at','desc');
         if($request->status != ''){
             $proyek = Proyek::where('status_proyek',$request->status);    
         }
@@ -41,9 +41,15 @@ class BerandaController extends Controller
             $proyek = Proyek::where('deskripsi_proyek','like',"%$request->cari%");
         }
         
-        $proyek = $proyek->paginate(10);
+        $proyek = $proyek->paginate(5);
 
-        return view('beranda.index', ['proyeks' => $proyek->appends(['status' => $request->status,'cari' => $request->cari]),'input' => $request, 'departemen' => $departemen ]);
+        return view('beranda.index',
+            ['proyeks' => $proyek->appends(['status' => $request->status,'cari' => $request->cari]),
+            'input' => $request, 
+            'departemen' => $departemen,
+            'jabatans' => $jabatans,
+            'kelompoks' => $kelompoks
+        ]);
     }
 
      /**
@@ -115,9 +121,6 @@ class BerandaController extends Controller
             $pekerjaan    = $pekerjaan->where('pegawai.id_kelompok',$request->id_kelompok);
         
         if(!empty($request->paginate_number)){
-            if($request->paginate_number==999)
-            $pekerjaan    = $pekerjaan->get();
-            else
             $pekerjaan    = $pekerjaan->paginate($request->paginate_number);
         }
         else
