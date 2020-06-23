@@ -136,8 +136,6 @@ class PresensiController extends Controller
             }
 
             if($jadwal){
-                // return $proyek;
-                // kalau ada, update data last waktu out = $waktu dan $data new waktu in = $waktu
                 $data               = new RiwayatPresensi;
                 $data->id_pegawai   = $request->id_pegawai;
                 $data->id_proyek    = $proyek->id_proyek;
@@ -145,10 +143,11 @@ class PresensiController extends Controller
                 $data->id_meta      = $pekerjaanMeta->id_meta;
 
                 $cek_presensi = RiwayatPresensi::where('id_pegawai',$data->id_pegawai)
-                                 ->whereDate('waktu_in',$hari_ini)->first();
+                                ->where('waktu_in', '>=', date('Y-m-d H:i:s',strtotime($jadwal->jam_masuk)))
+                                ->first();
                 // jika terdapat data
                 if($cek_presensi){
-
+                    return $cek_presensi;
                     // Pengecekan belum di checkout
                     $cek_pekerjaan = RiwayatPresensi::where('id_pegawai',$data->id_pegawai)
                         ->whereDate('waktu_in',$hari_ini)
@@ -183,12 +182,11 @@ class PresensiController extends Controller
                         $data->waktu_in = Carbon::now();
                         $data->save();
                         return redirect('')->with('success','Presensi Pekerjaan Berhasil' );
-                        // return redirect("/presensi-pegawai?ssn=$request->ssn")->with('danger','Terjadi kesalahan !' );
                     }
 
                 // tentukan data hari itu kosong , kalau kosong isi waktu in jam masuk
                 }elseif(empty($cek_presensi)){
-
+                    return 'anda terlamba!';
                     // ini untuk yang telat
                     if(Helper::time_to_int($waktu) > (Helper::time_to_int($jadwal->jam_masuk) + Helper::time_to_int($jadwal->toleransi)) ){
                         $telat = Helper::time2Diff($jadwal->jam_masuk,Carbon::now());
