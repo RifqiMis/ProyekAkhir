@@ -26,7 +26,12 @@ Route::match(["GET", "POST"], "/register", function(){
     return redirect("/login");
 })->name("register");
 
-Route::group(['middleware'=>['auth','checkRole:admin,manajer,hrd']],function(){
+Route::group(['middleware'=>['auth','checkRole:super admin']],function(){
+    Route::resource('user', 'UserController');
+});
+
+
+Route::group(['middleware'=>['auth','checkRole:admin,manajer,hrd,super admin']],function(){
     Route::resource('home', 'BerandaController');
 
     // Ajax
@@ -40,7 +45,7 @@ Route::group(['middleware'=>['auth','checkRole:admin,manajer,hrd']],function(){
 
 });
 
-Route::group(['middleware'=>['auth','checkRole:admin,manajer']],function(){
+Route::group(['middleware'=>['auth','checkRole:admin,manajer,super admin']],function(){
     Route::resource('jabatan', 'JabatanController');
     Route::resource('jam-kerja', 'JamKerjaController');
     Route::resource('kelompok_pegawai', 'KelompokPegawaiController');
