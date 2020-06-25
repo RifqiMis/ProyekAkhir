@@ -50,10 +50,12 @@
                                 <a href="{{url("jam-kerja/{$jamkerja->id_jam_kerja}/edit")}}" class="btn btn-outline-secondary btn-sm" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
+                                @if (Auth::user()->role == 'super admin')
                                 <button class="btn btn-outline-danger btn-sm" title="Hapus Permanen" onclick="return confirm('Hapus permanen data ini?')" @if ($jamkerja->default == "y") {{'disabled'}} @endif>
                                     <i class="fas fa-trash"></i>
                                 </button>
                                 {{ method_field('DELETE') }}
+                                @endif
                                 {{ csrf_field() }}
                             </form>
                         </td>

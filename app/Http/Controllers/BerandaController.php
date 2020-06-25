@@ -26,9 +26,11 @@ class BerandaController extends Controller
      */
     public function index(Request $request)
     {
-        $departemen['supervisor']   = Pegawai::where('id_jabatan','1')->get()->count();
+        $departemen['supervisor']   = Pegawai::where('id_jabatan','1')
+                                        ->where('status','bekerja')
+                                        ->get()->count();
         $departemen['kelompok']     = KelompokPegawai::count();
-        $departemen['pegawai']      = Pegawai::count();
+        $departemen['pegawai']      = Pegawai::where('status','bekerja')->count();
         $jabatans                   = Jabatan::all();
         $kelompoks                  = KelompokPegawai::all();
 

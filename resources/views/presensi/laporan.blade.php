@@ -108,7 +108,7 @@
                         <th scope="col">Pekerjaan</th>
                         <th scope="col">Waktu kerja</th>
                         <th scope="col">Total Waktu</th>
-                        @if (Auth::user()->role=='admin')
+                        @if (Auth::user()->role=='admin'||Auth::user()->role=='super admin')
                             <th scope="col" class="d-print-none">Opsi</th>
                         @endif
                     </tr>

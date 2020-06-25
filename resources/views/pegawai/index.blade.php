@@ -17,6 +17,7 @@
             <a href="{{url("pegawai/create")}}" class="btn btn-primary float-right d-print-none ">
                 <i class="fas fa-plus"></i> Tambah Data
             </a>
+            <button onclick="printDiv('laporan')" class="float-right btn btn-info d-print-none ml-2 mr-2" title="Cetak Data"><i class="fa fa-print"></i></button>
         </div>
 
         @include('components.notifikasi')
@@ -25,6 +26,18 @@
         <div class="container">
             <form action="{{ url('pegawai') }}" method="GET">
                 <div class="row d-print-none">
+                    <div class="col-3">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <label class="input-group-text" for="inputGroupSelect01">Status</label>
+                            </div>
+                            <select class="custom-select" id="inputGroupSelect01" name="status">
+                              <option value="">Semua</option>
+                              <option value="bekerja" {{$input->status=='bekerja'?'selected':''}} >Bekerja</option>
+                              <option value="berhenti" {{$input->status=='berhenti'?'selected':''}}>Berhenti</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-3">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
@@ -51,14 +64,13 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-2">
                         <div class="form-group">
                         <input type="text" name="cari" class="form-control" placeholder="Cari Proyek" value="@if (!empty($input->cari)){{$input->cari}}@endif">
                         </div>
                     </div>
-                    <div class="col-2">
+                    <div class="col-1">
                         <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
-                        <button onclick="printDiv('laporan')" class="float-right btn btn-info d-print-none ml-2" title="Cetak Data"><i class="fa fa-print"></i></button>
                     </div>                    
                 </div>
             </form>
@@ -96,16 +108,15 @@
                         <td class="d-print-none">
                             <form action="{{url("pegawai/{$pegawai->id_pegawai}")}}" method="post">
                                 <a href="#" value="{{ action('PegawaiController@show',$pegawai->id_pegawai) }}" class="btn btn-sm btn-outline-info modalMd" data-toggle="modal" data-target="#modalMd" title="Kartu Pegawai"><i class="fas fa-print"></i></a>
-                                {{-- <a href="{{url("pegawai/{$pegawai->id_pegawai}")}}" class="btn btn-outline-info btn-sm" title="Lihat QR Code Pegawai">
-                                    <i class="fas fa-print"></i>
-                                </a> --}}
                                 <a href="{{url("pegawai/{$pegawai->id_pegawai}/edit")}}" class="btn btn-outline-secondary btn-sm" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
+                                @if (Auth::user()->role == 'super admin')
                                 <button class="btn btn-outline-danger btn-sm" title="Hapus Permanen" onclick="return confirm('Hapus permanen data ini?')">
                                     <i class="fas fa-trash"></i>
                                 </button>
                                 {{ method_field('DELETE') }}
+                                @endif
                                 {{ csrf_field() }}
                             </form>
                         </td>
@@ -114,7 +125,7 @@
                 </tbody>
             </table>
             <div class="row d-print-none">
-                {{ $pegawais->links() }}
+                {{ $pegawais->withQueryString()->links() }}
             </div>
         </div>
     </div>

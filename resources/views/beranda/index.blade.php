@@ -6,15 +6,19 @@
 @endsection
 
 @section('content')
-    @if (Auth::user()->role!='hrd')
+<a class="dropdown-item" class="logout" href="{{ route('logout') }}"
+onclick="event.preventDefault();
+              document.getElementById('logout-form').submit();">
+ {{ __('Logout') }}
+</a>
+
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+ @csrf
+</form>
+    @if (Auth::user()->role!='hrd' || Auth::user()->role!='warehouse')
     <div class="row">
         <div class="col-8">
             <div class="bg-white shadow-sm">
-                {{-- <br>
-                <div class="container">
-                   <canvas id="myChart"></canvas>
-                </div>
-                <br> --}}
                 <br>
                 <div class="container overflow-auto" style="height: 370px">
                     <h3 class="text-center mb-5">Pengerjaan Proyek Kapal Hari ini</h3>
@@ -47,25 +51,6 @@
                 <div class="container pt-3 pb-2">
                     <canvas id="myChartPie"></canvas>
                 </div>
-                {{-- <br>
-                <div class="container text-center" style="position: relative;">
-                    <h3>Departemen Produksi</h3>
-                    <div class="row" style="margin-top: 15px">
-                        <div class="col-6">
-                            <a href=""><h2 style="margin-bottom: 0px">{{ $departemen['supervisor'] }}</h2></a>
-                            <p>Supervisor</p>
-                        </div>
-                        <div class="col-6">
-                            <a href=""><h2 style="margin-bottom: 0px">{{ $departemen['kelompok'] }}</h2></a>
-                            <p>Kelompok</p>
-                        </div>
-                        <div class="col-4">
-                            <a href=""><h2 style="margin-bottom: 0px">{{ $departemen['pegawai'] }}</h2></a>
-                            <p>Pekerja</p>
-                        </div>
-                    </div>
-                </div>
-                <br> --}}
             </div>
         </div>
     </div>
@@ -262,6 +247,7 @@
     </div>
     @endif
     
+    @if (Auth::user()->role!='warehouse')
     <div id="laporan">
         <div class="bg-white shadow-sm" style="margin-top: 25px">
             <br>
@@ -357,6 +343,11 @@
             <br>
         </div>
     </div>
+    @endif
+
+    @if (Auth::user()->role=='warehouse')
+    kamu warehouse
+    @endif
     
 <script type="application/javascript">
 

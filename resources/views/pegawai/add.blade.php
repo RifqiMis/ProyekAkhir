@@ -6,9 +6,6 @@
 
 @section('content')
     <style>
-        #upload {
-            opacity: 0;
-        }
 
         #upload-label {
             position: absolute;
@@ -55,13 +52,14 @@
                         <div class="form-group row">
                             <label class="col-4 col-form-label">Nama Pegawai</label>
                             <div class="col-8">
-                              <input type="text" class="form-control" name="nama_pegawai" placeholder="Nama Lengkap" value="{{Request::input("nama_pegawai")}}" required>
+                              <input type="text" class="form-control" name="nama_pegawai" placeholder="Nama Lengkap" value="{{Request::old("nama_pegawai")}}" required>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-4 col-form-label">SSN</label>
                             <div class="col-8">
-                              <input minlength="4" maxlength="4" type="text" class="form-control" name="ssn" placeholder="Nomor Pegawai" value="{{Request::input("ssn")}}">
+                              <input minlength="4" maxlength="4" type="text" class="form-control" name="ssn" placeholder="Nomor Pegawai" value="{{Request::old("ssn")}}">
+                              <input type="hidden" name="status" value="bekerja">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -98,8 +96,8 @@
                     </div>
                     <div class="col-4">
                         <div class="form-group row">
-                            <label class="col-2 col-form-label" for="upload"><span class="badge badge-secondary">Unggah Foto</span></label>
-                            <div class="col-4">
+                            <label class="col-4 col-form-label" for="upload">Unggah Foto</label>
+                            <div class="col-8">
                                 <input id="upload" class="col-form-label" type="file" name="foto" onchange="readURL(this);" class="form-control border-0">
                             </div>
                         </div>

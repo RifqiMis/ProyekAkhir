@@ -6,9 +6,6 @@
 
 @section('content')
 <style>
-    #upload {
-        opacity: 0;
-    }
 
     #upload-label {
         position: absolute;
@@ -62,7 +59,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-2 col-form-label" for="upload"><span class="badge badge-secondary">Unggah Foto</span></label>
+                    <label class="col-2 col-form-label" for="upload">Unggah Foto</label>
                     <div class="col-10">
                         <input id="upload" class="col-form-label" type="file" name="foto" onchange="readURL(this);" class="form-control border-0">
                     </div>

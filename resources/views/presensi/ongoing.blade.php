@@ -54,10 +54,12 @@
                                         <a href="{{url("presensi-proyek/{$d->id_presensi}/edit")}}" class="btn btn-outline-secondary btn-sm" title="Edit Waktu">
                                             <i class="fas fa-edit"></i>
                                         </a>
+                                        @if (Auth::user()->role == 'super admin')
                                         <button class="btn btn-outline-danger btn-sm" title="Hapus Permanen" onclick="return confirm('Hapus permanen data ini?')">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                         {{ method_field('DELETE') }}
+                                        @endif
                                         {{ csrf_field() }}
                                     </form>
                                 </td>

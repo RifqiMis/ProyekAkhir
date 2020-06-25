@@ -6,9 +6,6 @@
 
 @section('content')
     <style>
-        #upload {
-            opacity: 0;
-        }
 
         #upload-label {
             position: absolute;
@@ -93,6 +90,15 @@
                                     @foreach ($kelompoks as $key => $val)
                                         <option value="{{ $val->id_kelompok_pegawai }}" {{ $val->id_kelompok_pegawai == $pegawai->id_kelompok ? 'selected' : '' }}>{{ $val->nama_kelompok_pegawai }}</option>
                                     @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-4 col-form-label">Status</label>
+                            <div class="col-8">
+                                <select name="status" class="form-control" required>
+                                    <option value="bekerja" {{$val->status=='bekerja'?'selected':''}} >Bekerja</option>
+                              <option value="berhenti" {{$val->status=='berhenti'?'selected':''}}>Berhenti</option>
                                 </select>
                             </div>
                         </div>

@@ -62,10 +62,10 @@
                         @guest
                         @else
                             <li class="nav-item {{ Request::segment(1) === 'home' ? 'active' : null }}"><a class="nav-link" href="{{ url('/home') }}">Beranda</a></li>
-                            @if (Auth::user()->role==='manajer'||Auth::user()->role==='admin')
+                            @if (Auth::user()->role==='manajer'||Auth::user()->role==='admin'||Auth::user()->role==='super admin')
                                 <li class="nav-item {{ Request::segment(1) === 'proyek' ? 'active' : null }}"><a class="nav-link" class=".navbar-men" href="{{ url('/proyek') }}">Proyek</a></li>
                             @endif
-                            @if (Auth::user()->role==='admin')
+                            @if (Auth::user()->role==='admin'||Auth::user()->role==='super admin')
                                 <li class="nav-item {{ Request::segment(1) === 'pekerjaan' ? 'active' : null }}">
                                     <a class="nav-link" href="{{url('/pekerjaan')  }}">
                                         Pekerjaan
@@ -93,7 +93,7 @@
                                     </a>
                                 </li>
                             @endif
-                            @if (Auth::user()->role==='manajer'||Auth::user()->role==='admin')
+                            @if (Auth::user()->role==='manajer'||Auth::user()->role==='admin'||Auth::user()->role==='super admin')
                                 <li class="nav-item dropdown {{ Request::segment(1) === 'presensi-proyek' ? 'active' : null }}">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                         Presensi Proyek <span class="caret"></span>
@@ -107,6 +107,9 @@
                                         </a>
                                     </div>
                                 </li>
+                            @endif
+                            @if (Auth::user()->role==='super admin')
+                            <li class="nav-item {{ Request::segment(1) === 'user' ? 'active' : null }}"><a class="nav-link" href="{{ url('/user') }}">User</a></li>
                             @endif
                         @endguest
                     </ul>

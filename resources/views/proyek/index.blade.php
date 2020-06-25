@@ -94,7 +94,7 @@
                                 </div>
                             @endif
                         </td>
-                    @if (Auth::user()->role=='admin')
+                    @if (Auth::user()->role=='admin'||Auth::user()->role=='super admin')
                         <td class="d-print-none">
                             <form action="{{url("proyek/{$proyek->id_proyek}")}}" method="post">
                                 <a href="{{url("proyek/{$proyek->id_proyek}")}}" class="btn btn-outline-primary btn-sm" title="Daftar Pekerjaan">
@@ -103,11 +103,13 @@
                                 <a href="{{url("proyek/{$proyek->id_proyek}/edit")}}" class="btn btn-outline-secondary btn-sm @if ($proyek->status_proyek=='0') {{'d-none'}} @endif " title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
+                                @if (Auth::user()->role == 'super admin')
                                 <button class="btn btn-outline-danger btn-sm @if ($proyek->status_proyek=='0') {{'d-none'}} @endif" title="Hapus Permanen" onclick="return confirm('Hapus permanen data ini?')">
                                     <i class="fas fa-trash"></i>
                                 </button>
                                 {{ method_field('DELETE') }}
                                 {{ csrf_field() }}
+                                @endif
                             </form>
                         </td>
                     @endif

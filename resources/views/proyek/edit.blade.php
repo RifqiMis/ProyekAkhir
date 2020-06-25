@@ -6,9 +6,6 @@
 
 @section('content')
     <style>
-        #upload {
-            opacity: 0;
-        }
 
         #upload-label {
             position: absolute;
@@ -76,7 +73,7 @@
                             <small class="text-muted">Foto saat ini</small><br>
                             <img src="{{asset('storage/' . $proyek->foto)}}" width="150px"/>
                         @endif
-                        <input id="upload" class="col-form-label" type="file" name="foto" onchange="readURL(this);" class="form-control border-0"><br>
+                        <input id="upload" class="" type="file" name="foto" onchange="readURL(this);" class="form-control border-0"><br>
                         <small class="text-muted">Kosongkan jika tidak ingin mengubah foto</small>
                     </div>
                 </div>

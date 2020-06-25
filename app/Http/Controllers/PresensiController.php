@@ -74,7 +74,9 @@ class PresensiController extends Controller
             }
 
             if($jadwal){
-                $data = Pegawai::where('ssn',$request->ssn)->first();
+                $data = Pegawai::where('ssn',$request->ssn)
+                    ->where('status','bekerja')
+                    ->first();
                 if($data){
                     return view('presensi.pekerjaan',compact('data'));
                 }else{

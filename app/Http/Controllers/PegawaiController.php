@@ -42,9 +42,12 @@ class PegawaiController extends Controller
         if($request->id_jabatan != ''){
             $pegawai = $pegawai->where('id_jabatan',$request->id_jabatan);    
         }
+        if($request->status != ''){
+            $pegawai = $pegawai->where('status',$request->status);    
+        }
         $pegawai = $pegawai->paginate(10);
         return view('pegawai.index', 
-            ['pegawais' => $pegawai->appends(['id_kelompok' => $request->id_kelompok,'id_jabatan' => $request->id_jabatan,'cari' => $request->cari]),
+            ['pegawais' => $pegawai,
             'input' => $request,
             'jabatans' => $jabatans,
             'kelompoks' => $kelompoks
@@ -83,6 +86,7 @@ class PegawaiController extends Controller
         $data->ssn              = $request->ssn;
         $data->id_jabatan       = $request->id_jabatan;
         $data->id_kelompok      = $request->id_kelompok;
+        $data->status           = $request->status;
         $extension              = $request->file('foto')->extension();
 
         if($request->file('foto')){
@@ -149,6 +153,7 @@ class PegawaiController extends Controller
         $data->ssn              = $request->ssn;
         $data->id_jabatan       = $request->id_jabatan;
         $data->id_kelompok      = $request->id_kelompok;
+        $data->status           = $request->status;
 
         $new_foto = $request->file('foto');
         if($new_foto){
