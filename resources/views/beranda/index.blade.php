@@ -6,19 +6,15 @@
 @endsection
 
 @section('content')
-<a class="dropdown-item" class="logout" href="{{ route('logout') }}"
-onclick="event.preventDefault();
-              document.getElementById('logout-form').submit();">
- {{ __('Logout') }}
-</a>
-
-<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
- @csrf
-</form>
-    @if (Auth::user()->role!='hrd' || Auth::user()->role!='warehouse')
+    @if (!in_array(Auth::user()->role,['hrd','warehouse']))
     <div class="row">
         <div class="col-8">
             <div class="bg-white shadow-sm">
+                {{-- <br>
+                <div class="container">
+                   <canvas id="myChart"></canvas>
+                </div>
+                <br> --}}
                 <br>
                 <div class="container overflow-auto" style="height: 370px">
                     <h3 class="text-center mb-5">Pengerjaan Proyek Kapal Hari ini</h3>
@@ -51,6 +47,25 @@ onclick="event.preventDefault();
                 <div class="container pt-3 pb-2">
                     <canvas id="myChartPie"></canvas>
                 </div>
+                {{-- <br>
+                <div class="container text-center" style="position: relative;">
+                    <h3>Departemen Produksi</h3>
+                    <div class="row" style="margin-top: 15px">
+                        <div class="col-6">
+                            <a href=""><h2 style="margin-bottom: 0px">{{ $departemen['supervisor'] }}</h2></a>
+                            <p>Supervisor</p>
+                        </div>
+                        <div class="col-6">
+                            <a href=""><h2 style="margin-bottom: 0px">{{ $departemen['kelompok'] }}</h2></a>
+                            <p>Kelompok</p>
+                        </div>
+                        <div class="col-4">
+                            <a href=""><h2 style="margin-bottom: 0px">{{ $departemen['pegawai'] }}</h2></a>
+                            <p>Pekerja</p>
+                        </div>
+                    </div>
+                </div>
+                <br> --}}
             </div>
         </div>
     </div>
@@ -247,7 +262,7 @@ onclick="event.preventDefault();
     </div>
     @endif
     
-    @if (Auth::user()->role!='warehouse')
+    @if (in_array(Auth::user()->role,['hrd']))
     <div id="laporan">
         <div class="bg-white shadow-sm" style="margin-top: 25px">
             <br>
@@ -345,8 +360,95 @@ onclick="event.preventDefault();
     </div>
     @endif
 
-    @if (Auth::user()->role=='warehouse')
-    kamu warehouse
+    @if (in_array(Auth::user()->role,['warehouse']))
+    <div id="laporan-warehouse">
+        <div class="bg-white shadow-sm" style="margin-top: 25px">
+            <br>
+            <div class="container">
+                <div>
+                    <center>
+                        <img src="{{asset('storage/lundin.png')}}" class="d-none d-print-block" alt="" style="width: 100px;">
+                    </center>
+                    <h4 class="input text-center mb-0 mt-2">Presensi Pekerja yang Berjalan pada {{Helper::tanggal_idn(now())}} </h4>
+                    <h3  class="text-center">Departemen Produksi</h3>
+                </div>
+                <div class="d-none d-print-block text-right font-italic">Tanggal Cetak : {{Helper::tanggal_idn(now())}} {{date('H:i')}} WIB</div>
+                <br>
+                {{-- isi ongoing --}}
+                <div class="container">
+                    <div class="row mb-2">
+                        <div class="col-12">
+                            <button onclick="printDiv('laporan-warehouse')" class="float-right btn btn-info d-print-none" title="Cetak Data"><i class="fa fa-print"></i></button>
+                        </div>
+                    </div>
+                    <form action="{{ url('home') }}" method="get">
+                        <div class="row">
+                            <div class="col-1  d-print-none">
+                                <select class="form-control" name="paginate-number-warehouse" id="paginate-number-warehouse">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="0">All</option>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <label class="input-group-text" for="kelompokW">Kelompok</label>
+                                    </div>
+                                    <select class="custom-select" id="kelompokW" name="kelompokW">
+                                      <option value="0">Semua</option>
+                                      @foreach ($kelompoks as $v)
+                                        <option value="{{$v->id_kelompok_pegawai}}">{{$v->nama_kelompok_pegawai}}</option>
+                                      @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <label class="input-group-text">Jabatan</label>
+                                    </div>
+                                    <select class="custom-select" id="jabatanW" name="jabatanW">
+                                      <option value="">Semua</option>
+                                      @foreach ($jabatans as $key => $val)
+                                        <option value="{{ $val->id_jabatan }}">{{ $val->nama_jabatan }}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3 d-print-none">
+                                <div class="form-group">
+                                 <input type="text" name="serachW" id="serachW" class="form-control" placeholder="Cari nama pegawai"/>
+                                 <input type="hidden" id="tanggalWarehouse" name="tanggalWarehouse" class="form-control" aria-describedby="basic-addon1" value="{{ date('Y-m-d') }}">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <br>
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">SSN</th>
+                            <th scope="col">Nama Pegawai</th>
+                            <th scope="col">Foto</th>
+                            <th scope="col">Proyek</th>
+                            <th scope="col">Pekerjaan</th>
+                            <th scope="col">Waktu Presensi</th>
+                        </tr>
+                        </thead>
+                        <tbody id="warehouse">
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="hidden_page_warehouse" id="hidden_page_warehouse" value="1" />
+                </div>
+    
+            </div>
+            <br>
+        </div>
+    </div>
     @endif
     
 <script type="application/javascript">
@@ -629,6 +731,96 @@ onclick="event.preventDefault();
             $('li').removeClass('active');
                 $(this).parent().addClass('active');
             fetch_data_terlambat(page, tanggalAbsen, query, num, kelompok, jabatan);
+        });
+
+
+        // Warehouse 
+        var tanggalWarehouse = $('input[name="tanggalWarehouse"').val();
+        var query = $('#serachW').val();
+        var num = $('#paginate-number-warehouse').val();
+        var kelompok = $('#kelompokW').val();
+        var jabatan = $('#jabatanW').val();
+        var page = 1;
+        fetch_data_warehouse(page, tanggalWarehouse, query, num, kelompok, jabatan);
+
+        function fetch_data_warehouse(page, tanggalWarehouse, query, num, kelompok, jabatan)
+        {
+            $.ajax({
+                url:"/warehouse?page="+page+"&tanggal="+tanggalWarehouse+"&query="+query+"&num="+num+"&kelompok="+kelompok+"&jabatan="+jabatan,
+                success:function(data)
+                {
+                    $('#warehouse').html('');
+                    $('#warehouse').html(data);
+                }
+            })
+
+        }
+
+        $(document).on('keyup', '#serachW', function(){
+            var tanggalWarehouse = $('input[name="tanggalWarehouse"').val();
+            var query = $('#serachW').val();
+            var num = $('#paginate-number-warehouse').val();
+            var kelompok = $('#kelompokW').val();
+            var jabatan = $('#jabatanW').val();
+            var page = 1;
+            fetch_data_warehouse(page, tanggalWarehouse, query, num, kelompok, jabatan);
+        });
+
+        $(document).on('change', '#tanggalWarehouse', function(){
+            var tanggalWarehouse = $('input[name="tanggalWarehouse"').val();
+            var query = $('#serachW').val();
+            var num = $('#paginate-number-warehouse').val();
+            var kelompok = $('#kelompokW').val();
+            var jabatan = $('#jabatanW').val();
+            var page = 1;
+            fetch_data_warehouse(page, tanggalWarehouse, query, num, kelompok, jabatan);
+        });
+
+        $(document).on('change', '#kelompokW', function(){
+            var tanggalWarehouse = $('input[name="tanggalWarehouse"').val();
+            var query = $('#serachW').val();
+            var num = $('#paginate-number-warehouse').val();
+            var kelompok = $('#kelompokW').val();
+            var jabatan = $('#jabatanW').val();
+            var page = 1;
+            fetch_data_warehouse(page, tanggalWarehouse, query, num, kelompok, jabatan);
+        });
+
+        $(document).on('change', '#jabatanW', function(){
+            var tanggalWarehouse = $('input[name="tanggalWarehouse"').val();
+            var query = $('#serachW').val();
+            var num = $('#paginate-number-warehouse').val();
+            var kelompok = $('#kelompokW').val();
+            var jabatan = $('#jabatanW').val();
+            var page = 1;
+            fetch_data_warehouse(page, tanggalWarehouse, query, num, kelompok, jabatan);
+        });
+
+        $(document).on('change', '#paginate-number-warehouse', function(){
+            var tanggalWarehouse = $('input[name="tanggalWarehouse"').val();
+            var query = $('#serachW').val();
+            var num = $('#paginate-number-warehouse').val();
+            var kelompok = $('#kelompokW').val();
+            var jabatan = $('#jabatanW').val();
+            var page = 1;
+            fetch_data_warehouse(page, tanggalWarehouse, query, num, kelompok, jabatan);
+        });
+        
+        $(document).on('click', '.warehouse .pagination a', function(event){
+            event.preventDefault();
+            var page = $(this).attr('href').split('page=')[1];
+            $('#hidden_page_absen').val(page);
+
+            var tanggalWarehouse = $('input[name="tanggalWarehouse"').val();
+            var query = $('#serachW').val();
+            var num = $('#paginate-number-warehouse').val();
+            var kelompok = $('#kelompokW').val();
+            var jabatan = $('#jabatanW').val();
+
+            $('li').removeClass('active');
+            $(this).parent().addClass('active');
+            fetch_data_warehouse(page, tanggalWarehouse, query, num, kelompok, jabatan);
+
         });
             
     });

@@ -31,18 +31,12 @@ Route::group(['middleware'=>['auth','checkRole:super admin']],function(){
 });
 
 
-Route::group(['middleware'=>['auth','checkRole:admin,manajer,hrd,super admin']],function(){
+Route::group(['middleware'=>['auth','checkRole:admin,manajer,hrd,super admin,warehouse']],function(){
     Route::resource('home', 'BerandaController');
 
     // Ajax
-    Route::get('pekerjaan/{id_pekerjaan}/meta', 'PekerjaanController@getMeta');
-    Route::get('proyek-total', 'ProyekController@total')->name('proyek-total');
     Route::get('pegawai-terlambat', 'RiwayatPresensiController@terlambat')->name('pegawai-terlambat');
-    Route::get('akumulasi-presensi', 'RiwayatPresensiController@akumulasi')->name('akumulasi-presensi');
-    Route::get('akumulasi-pegawai', 'RiwayatPresensiController@akumulasiPegawai')->name('akumulasi-pegawai');
-    Route::get('pengerjaan', 'RiwayatPresensiController@pengerjaanHariIni')->name('pengerjaan');
-    Route::get('beranda/pengerjaan', 'BerandaController@pengerjaanHariIni');
-
+    Route::get('warehouse', 'RiwayatPresensiController@warehouse')->name('warehouse');
 });
 
 Route::group(['middleware'=>['auth','checkRole:admin,manajer,super admin']],function(){
@@ -66,6 +60,12 @@ Route::group(['middleware'=>['auth','checkRole:admin,manajer,super admin']],func
     Route::any('pegawai-cari', 'PegawaiController@cari');
     Route::get('pekerjaan/{id_proyek}/metaKerja', 'PekerjaanController@getMetaKerja');
     Route::get('pekerjaan/{id_proyek}/{id_pekerjaan}/metaPresen', 'PekerjaanController@getMetaPresen');
+    Route::get('akumulasi-presensi', 'RiwayatPresensiController@akumulasi')->name('akumulasi-presensi');
+    Route::get('akumulasi-pegawai', 'RiwayatPresensiController@akumulasiPegawai')->name('akumulasi-pegawai');
+    Route::get('pengerjaan', 'RiwayatPresensiController@pengerjaanHariIni')->name('pengerjaan');
+    Route::get('beranda/pengerjaan', 'BerandaController@pengerjaanHariIni');
+    Route::get('pekerjaan/{id_pekerjaan}/meta', 'PekerjaanController@getMeta');
+    Route::get('proyek-total', 'ProyekController@total')->name('proyek-total');
 
 });
 
