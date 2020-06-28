@@ -120,6 +120,13 @@ class Helper
         return $date2->diff($date1)->format("%H:%I:%S");
     }
 
+    public static function day2Diff($waktu_in,$waktu_out){
+        $date1 = Carbon::parse($waktu_in);
+        $date2 = Carbon::parse($waktu_out);
+        $interval = date_diff($date1, $date2);
+        return $interval->format('%a').' Hari';
+    }
+
 
     public static function SumTime($times) {
         $minutes = 0; //declare minutes either it gives Notice: Undefined variable
