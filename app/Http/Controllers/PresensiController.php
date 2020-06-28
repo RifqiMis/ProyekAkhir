@@ -96,6 +96,10 @@ class PresensiController extends Controller
             $proyek         = Proyek::find($kode[0]);
             $pekerjaan      = Pekerjaan::find($kode[1]);
             $pekerjaanMeta  = PekerjaanMeta::find($kode[2]);
+
+            if(!$proyek||!$pekerjaan||!$pekerjaanMeta)
+            return redirect("/presensi-pegawai?ssn=$request->ssn")->with('danger','Pekerjaan tidak terdaftar' );
+
         }else{
             return redirect("/presensi-pegawai?ssn=$request->ssn")->with('danger','Format Kode Pekerjaan Salah !' );
         }

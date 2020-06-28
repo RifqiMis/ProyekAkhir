@@ -148,7 +148,7 @@ class PegawaiController extends Controller
         ]);
   
         $data = Pegawai::find($id);
-        $data->nama_pegawai = $request->nama_pegawai;
+        $data->nama_pegawai     = $request->nama_pegawai;
         $data->jenis_kelamin    = $request->jenis_kelamin;
         $data->ssn              = $request->ssn;
         $data->id_jabatan       = $request->id_jabatan;

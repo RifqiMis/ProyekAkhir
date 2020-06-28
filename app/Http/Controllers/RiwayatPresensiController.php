@@ -53,6 +53,7 @@ class RiwayatPresensiController extends Controller
 
         $pegawai = RiwayatPresensi::select('id_pegawai')
             ->whereDate('waktu_in',$request->tanggalAbsen)
+            ->where('status','berhenti')
             ->groupBy('id_pegawai')
             ->get();
 

@@ -137,10 +137,11 @@ class ProyekController extends Controller
   
         $data = Proyek::find($id);
         $data->deskripsi_proyek = $request->deskripsi_proyek;
-        $data->status_proyek = $request->status_proyek;
+        $data->status_proyek    = $request->status_proyek;
         if($data->status_proyek == 0){
             $data->tanggal_selesai = Carbon::now();
         }
+        
         $new_foto = $request->file('foto');
         if($new_foto){
             if($data->foto && file_exists(storage_path('app/public/' .$data->foto))){
