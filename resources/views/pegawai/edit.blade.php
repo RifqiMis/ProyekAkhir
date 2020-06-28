@@ -97,8 +97,8 @@
                             <label class="col-4 col-form-label">Status</label>
                             <div class="col-8">
                                 <select name="status" class="form-control" required>
-                                    <option value="bekerja" {{$val->status=='bekerja'?'selected':''}} >Bekerja</option>
-                              <option value="berhenti" {{$val->status=='berhenti'?'selected':''}}>Berhenti</option>
+                                    <option value="bekerja" {{$val->status=='bekerja'?'selected':''}} >Aktif</option>
+                                    <option value="berhenti" {{$val->status=='berhenti'?'selected':''}}>Tidak Aktif</option>
                                 </select>
                             </div>
                         </div>

@@ -11,10 +11,7 @@
 </div>
 <hr>
 <div style="margin-left:10%;">
-    <div id="print" style="
-    height: 54mm;
-    width: 85mm;
-    ">
+    <div id="print" style="height: 54mm;width: 85mm;">
         <div style="
         background-color : #fff;
         border-radius: 4%;
@@ -84,6 +81,8 @@
                 window.saveAs(blob, "Pekerjaan.png");
             }
         });
+    }
+    
 
     // // -- resize to big 
     // var node = document.getElementById(div);
@@ -114,9 +113,8 @@
     //     console.error("oops, something went wrong!", error);
     // });
 
- }
 
- $('#dom').click(function () {
+    $('#dom').click(function () {
         domtoimage
             .toJpeg(document.getElementById('print'), {
                 quality: 1

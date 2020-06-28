@@ -15,7 +15,7 @@
                     <center>
                         <img src="{{asset('storage/lundin.png')}}" class="d-none d-print-block" alt="" style="width: 100px;">
                     </center>
-                    <h4 class="input text-center mb-0 mt-2">Daftar Pegawai yang Sedang Bekerja</h4>
+                    <h4 class="input text-center mb-0 mt-2">Presensi yang Sedang Berjalan</h4>
                     <h3  class="text-center">Departemen Produksi</h3>
                 </div>
                 <br>

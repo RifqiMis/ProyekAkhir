@@ -49,19 +49,19 @@
                 <div class="form-group row">
                     <label class="col-2 col-form-label">Kode Proyek</label>
                     <div class="col-5">
-                      <input type="text" class="form-control" name="id_proyek" placeholder="kode proyek">
+                      <input type="text" class="form-control" name="id_proyek" placeholder="kode proyek" value="{{Request::old("id_proyek")}}">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-2 col-form-label">Proyek</label>
                     <div class="col-5">
-                      <input type="text" class="form-control" name="deskripsi_proyek" placeholder="nama proyek">
+                      <input type="text" class="form-control" name="deskripsi_proyek" placeholder="nama proyek" value="{{Request::old("deskripsi_proyek")}}">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-2 col-form-label" for="upload">Unggah Foto</label>
                     <div class="col-10">
-                        <input id="upload" class="col-form-label" type="file" name="foto" onchange="readURL(this);" class="form-control border-0">
+                        <input id="upload" class="col-form-label" type="file" name="foto" onchange="readURL(this);" class="form-control border-0" required value="{{Request::old("foto")}}">
                     </div>
                 </div>
                 <!-- Uploaded image area-->

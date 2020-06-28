@@ -92,6 +92,10 @@
                                 <div class="badge badge-secondary">
                                     {{ 'Selesai' }}
                                 </div>
+                                <br>
+                                {{ 'Tanggal :'.Helper::tanggal_idn($proyek->tanggal_selesai) }}
+                                <br>
+                                {{ 'Lama : '.Helper::day2Diff($proyek->created_at,$proyek->tanggal_selesai) }}
                             @endif
                         </td>
                     @if (Auth::user()->role=='admin'||Auth::user()->role=='super admin')

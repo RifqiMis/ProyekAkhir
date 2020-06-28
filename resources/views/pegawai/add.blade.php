@@ -98,7 +98,7 @@
                         <div class="form-group row">
                             <label class="col-4 col-form-label" for="upload">Unggah Foto</label>
                             <div class="col-8">
-                                <input id="upload" class="col-form-label" type="file" name="foto" onchange="readURL(this);" class="form-control border-0">
+                                <input id="upload" class="col-form-label" type="file" name="foto" onchange="readURL(this);" class="form-control border-0" required>
                             </div>
                         </div>
                         <!-- Uploaded image area-->

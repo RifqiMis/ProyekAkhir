@@ -50,7 +50,8 @@
                 <div class="form-group row">
                     <label class="col-2 col-form-label">Kode Proyek</label>
                     <div class="col-5">
-                        <input type="text" class="form-control" name="id_proyek" placeholder="Kode proyek" value="{{$proyek->id_proyek}}">
+                        <input type="text" class="form-control" name="id_proyek" placeholder="Kode proyek" value="{{$proyek->id_proyek}}" disabled>
+                        <input type="hidden" name="id_proyek" value="{{$proyek->id_proyek}}">
                     </div>
                 </div>
                 <div class="form-group row">

@@ -47,25 +47,6 @@
                 <div class="container pt-3 pb-2">
                     <canvas id="myChartPie"></canvas>
                 </div>
-                {{-- <br>
-                <div class="container text-center" style="position: relative;">
-                    <h3>Departemen Produksi</h3>
-                    <div class="row" style="margin-top: 15px">
-                        <div class="col-6">
-                            <a href=""><h2 style="margin-bottom: 0px">{{ $departemen['supervisor'] }}</h2></a>
-                            <p>Supervisor</p>
-                        </div>
-                        <div class="col-6">
-                            <a href=""><h2 style="margin-bottom: 0px">{{ $departemen['kelompok'] }}</h2></a>
-                            <p>Kelompok</p>
-                        </div>
-                        <div class="col-4">
-                            <a href=""><h2 style="margin-bottom: 0px">{{ $departemen['pegawai'] }}</h2></a>
-                            <p>Pekerja</p>
-                        </div>
-                    </div>
-                </div>
-                <br> --}}
             </div>
         </div>
     </div>
@@ -142,6 +123,10 @@
                                     <div class="d-none d-print-block">
                                         {{ 'Selesai' }}
                                     </div>
+                                    <br>
+                                    {{ 'Tanggal :'.Helper::tanggal_idn($proyek->tanggal_selesai) }}
+                                    <br>
+                                    {{ 'Lama : '.Helper::day2Diff($proyek->created_at,$proyek->tanggal_selesai) }}
                                 @endif
                             </td>
                             <td>
@@ -262,7 +247,7 @@
     </div>
     @endif
     
-    @if (in_array(Auth::user()->role,['hrd']))
+    @if (in_array(Auth::user()->role,['hrd','admin','super admin','manajer']))
     <div id="laporan">
         <div class="bg-white shadow-sm" style="margin-top: 25px">
             <br>
@@ -540,8 +525,13 @@
                         datasets: [{
                             data: data.grafik,
                             // data: total,
-                            backgroundColor: ["rgba(75, 192, 192, 1)","rgba(150, 150, 150, 1)"],
-                            hoverBackgroundColor: ["rgba(75, 192, 192, 0.5)","rgba(150, 150, 150, 0.5)"]
+                            backgroundColor: ["rgba(150, 150, 150, 0.5)","rgba(75, 192, 192, 0.5)"],
+                            hoverBackgroundColor: ["rgba(150, 150, 150, 0.2)","rgba(75, 192, 192, 0.2)"],
+                            borderColor: [
+                                'rgba(150, 150, 150, 1)',
+                                'rgba(75, 192, 192, 1)',
+                            ],
+                            borderWidth: 1
                             }]
                         },
                         options: {

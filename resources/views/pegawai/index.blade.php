@@ -33,8 +33,8 @@
                             </div>
                             <select class="custom-select" id="inputGroupSelect01" name="status">
                               <option value="">Semua</option>
-                              <option value="bekerja" {{$input->status=='bekerja'?'selected':''}} >Bekerja</option>
-                              <option value="berhenti" {{$input->status=='berhenti'?'selected':''}}>Berhenti</option>
+                              <option value="bekerja" {{$input->status=='bekerja'?'selected':''}} >Aktif</option>
+                              <option value="berhenti" {{$input->status=='berhenti'?'selected':''}}>Tidak Aktif</option>
                             </select>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                     </div>
                     <div class="col-2">
                         <div class="form-group">
-                        <input type="text" name="cari" class="form-control" placeholder="Cari Proyek" value="@if (!empty($input->cari)){{$input->cari}}@endif">
+                        <input type="text" name="cari" class="form-control" placeholder="Cari Nama Pegawai" value="@if (!empty($input->cari)){{$input->cari}}@endif">
                         </div>
                     </div>
                     <div class="col-1">
