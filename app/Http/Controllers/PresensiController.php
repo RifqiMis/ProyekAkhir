@@ -63,7 +63,7 @@ class PresensiController extends Controller
                     ->first()
                 ;
                 if(!$jadwal){
-                    return redirect('')->with('danger','Saat tidak ada jadwal kerja' );
+                    return redirect('')->with('danger','Saat ini tidak ada jadwal kerja' );
                 }
             }
 
@@ -131,7 +131,7 @@ class PresensiController extends Controller
                     ->first()
                 ;
                 if(!$jadwal){
-                    return redirect("/presensi-pegawai?ssn=$request->ssn")->with('danger','Saat tidak ada jadwal kerja' );
+                    return redirect("/presensi-pegawai?ssn=$request->ssn")->with('danger','Saat ini tidak ada jadwal kerja' );
                 }
             }
 

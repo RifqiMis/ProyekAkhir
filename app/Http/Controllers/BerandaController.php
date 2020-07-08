@@ -163,9 +163,10 @@ class BerandaController extends Controller
             $pekerjaanMeta = PekerjaanMeta::where('id_meta',$request->id_meta)->first();
         }
 
-        if($request->status==1){
+        if($request->status=="dikerjakan"){
             $details    = $details->where('waktu_out',NULL);
-        }elseif($request->status==0){
+        }
+        elseif($request->status=="selesai"){
             $details    = $details->where('waktu_out','!=',NULL);
         }
 

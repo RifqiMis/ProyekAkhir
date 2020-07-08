@@ -48,6 +48,6 @@
 <script type="application/javascript">
     setTimeout(function() {
         $('.alert').fadeOut();
-    }, 3000);
+    }, 15000);
 </script>
 

@@ -75,7 +75,7 @@ class PegawaiController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'nama_pegawai'  => 'required|unique:pegawai',
+            // 'nama_pegawai'  => 'required|unique:pegawai',
             'ssn'           => 'required|unique:pegawai',
             'foto'          => 'required',
         ]);
@@ -137,10 +137,10 @@ class PegawaiController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'nama_pegawai' => [
-                'required',
-                Rule::unique('pegawai')->ignore($id,'id_pegawai')
-            ],
+            // 'nama_pegawai' => [
+            //     'required',
+            //     Rule::unique('pegawai')->ignore($id,'id_pegawai')
+            // ],
             'ssn' => [
                 'required',
                 Rule::unique('pegawai')->ignore($id,'id_pegawai')

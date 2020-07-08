@@ -107,7 +107,9 @@
                         </td>
                         <td class="d-print-none">
                             <form action="{{url("pegawai/{$pegawai->id_pegawai}")}}" method="post">
+                                @if ($pegawai->status=='bekerja')
                                 <a href="#" value="{{ action('PegawaiController@show',$pegawai->id_pegawai) }}" class="btn btn-sm btn-outline-info modalMd" data-toggle="modal" data-target="#modalMd" title="Kartu Pegawai"><i class="fas fa-print"></i></a>
+                                @endif
                                 <a href="{{url("pegawai/{$pegawai->id_pegawai}/edit")}}" class="btn btn-outline-secondary btn-sm" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>

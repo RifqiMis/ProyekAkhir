@@ -71,8 +71,8 @@
                             </div>
                             <select class="custom-select" id="inputGroupSelect01" name="status">
                                 <option value="">Semua</option>
-                                <option @if ($input->status=='1'){{'selected'}}@endif value="1">Dikerjakan</option>
-                                <option @if ($input->status=='0'){{'selected'}}@endif value="0">Selesai</option>
+                                <option @if ($input->status=='dikerjakan'){{'selected'}}@endif value="dikerjakan">Dikerjakan</option>
+                                <option @if ($input->status=='selesai'){{'selected'}}@endif value="selesai">Selesai</option>
                             </select>
                         </div>
                         <div class="col-2">

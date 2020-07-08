@@ -53,7 +53,6 @@ class RiwayatPresensiController extends Controller
 
         $pegawai = RiwayatPresensi::select('id_pegawai')
             ->whereDate('waktu_in',$request->tanggalAbsen)
-            ->where('status','berhenti')
             ->groupBy('id_pegawai')
             ->get();
 
@@ -64,7 +63,8 @@ class RiwayatPresensiController extends Controller
             $id_pegawai[$key] = $value->id_pegawai;
         }
 
-        $data = Pegawai::whereNotIn('id_pegawai',$id_pegawai);
+        $data = Pegawai::whereNotIn('id_pegawai',$id_pegawai)
+            ->where('status','bekerja');
 
         if($request->get('kelompok')){
             $data = $data->where('pegawai.id_kelompok',$request->kelompok);

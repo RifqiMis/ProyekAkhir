@@ -10,7 +10,7 @@
             <td>{{ $d->pekerjaan->nama_pekerjaan.' '.$d->pekerjaanMeta->nama_meta }}</td>
             <td> {{date('H:i:s',strtotime($d->waktu_in)).' - '.date('H:i:s',strtotime($d->waktu_out))}} </td>
             <td>{{ Helper::humanJam(Helper::time2Diff(date('H:i',strtotime($d->waktu_in)),date('H:i',strtotime($d->waktu_out)))) }}</td>
-            @if (Auth::user()->role=='admin')
+            @if (Auth::user()->role=='admin'||Auth::user()->role=='super admin')
                 <td scope="col" class="d-print-none">
                     <form action="{{url("presensi-proyek/{$d->id_presensi}")}}" method="post">
                         @if ( date('Y-m-d',strtotime($d->waktu_in)) == date('Y-m-d'))
